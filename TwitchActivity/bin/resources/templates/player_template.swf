@@ -1,0 +1,17 @@
+<object bgcolor="#000000" 
+        data="//www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf" 
+        height="600" 
+        type="application/x-shockwave-flash" 
+        width="800" 
+        > 
+  <param name="allowFullScreen" 
+          value="true" />
+  <param name="allowNetworking" 
+          value="all" />
+  <param name="allowScriptAccess" 
+          value="always" />
+  <param name="movie" 
+          value="//www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf" />
+  <param name="flashvars" 
+          value="channel=peanutflake&auto_play=true&start_volume=10" />
+</object>
