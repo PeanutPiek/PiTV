@@ -1,5 +1,5 @@
 # PiTV
-The PiTV Project is designed to integrate different Functions of a Smart TV on any Display.
+The PiTV Project is designed to integrate different Functions of a Smart TV on any kind of Display.
 At this Time, this Page is only a placeholder for the Application. The Application is in development and requires some more time for the Release. Please stand by and review this Page frequently.
 
 The PiTV Wiki provides any kind of Informations about how to handle the Software and what Hardware is needed.
