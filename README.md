@@ -20,8 +20,10 @@ Full Customization:
 
 Hardware needed:
   - A Raspberry Pi (Any Kind of Model), for HDMI Support i recommend the Raspberry Pi 2 Model B.
+  - Any kind of Display, which you will tune to a Smart TV.
   - Some electric Components, for the IR Interface.
     - I will offer a List of Components, also Circut and Board Pattern (Made in EAGLE 7.3.0).
   - Graphics Cable, based on the Kind of Raspberry Pi and the Screen you will use. (e.x. HDMI Cable)
   - Power Supply for the Raspberry Pi.
+
 
