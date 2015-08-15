@@ -16,14 +16,14 @@ Basic Functions:
 
 Full Customization:
   - You can develop your own Java Application, to integrate into the PiTV.
-  - You can design the PiTV GUI on your own, including Color Management and Content Order.
+  - You can design the PiTV GUI on your own, including color management and content order.
 
 Hardware needed:
-  - A Raspberry Pi (Any Kind of Model), for HDMI Support i recommend the Raspberry Pi 2 Model B.
-  - Any kind of Display, which you will tune to a Smart TV.
-  - Some electric Components, for the IR Interface.
-    - I will offer a List of Components, also Circut and Board Pattern (Made in EAGLE 7.3.0).
-  - Graphics Cable, based on the Kind of Raspberry Pi and the Screen you will use. (e.x. HDMI Cable)
-  - Power Supply for the Raspberry Pi.
+  - A Raspberry Pi (any kind of model); for HDMI Support I recommend the Raspberry Pi 2 Model B.
+  - Any kind of display, which you will tune to a Smart TV.
+  - Some electric components, for the IR Interface.
+    - I will offer a list of components, also circut and board pattern (Made in EAGLE 7.3.0).
+  - Graphics cable, based on the kind of Raspberry Pi and the screen you will use. (e.x. HDMI Cable)
+  - Power supply for the Raspberry Pi.
 
 
