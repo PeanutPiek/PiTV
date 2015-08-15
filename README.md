@@ -16,7 +16,7 @@ Basic Functions:
 
 Full Customization:
   - You can develop your own Java Application, to integrate into the PiTV.
-    - Feel free to ask for Support or bring your own Insprition for an Application.
+    - Feel free to ask for Support or bring your own Insprition for an Application. I will help you if the Idea is worth it.
   - You can design the PiTV GUI on your own, including color management and content order.
 
 Hardware needed:
