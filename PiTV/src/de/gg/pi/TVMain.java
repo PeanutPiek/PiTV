@@ -107,7 +107,7 @@ public class TVMain {
 						if(exec.isEmpty()) {
 							clazz = Class.forName(className);
 						} else {
-							File f = new File(exec + ".jar");
+							File f = new File("act/" + exec + ".jar");
 							if(f.exists()) {
 								URL url = f.toURI().toURL();
 								URL[] urls = new URL[] {url};

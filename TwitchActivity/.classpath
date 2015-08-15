@@ -6,10 +6,5 @@
 	<classpathentry kind="lib" path="G:/workbench/libraries/DJNativeSwing/DJNativeSwing-SWT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="G:/workbench/libraries/SWT6M1/swt.jar"/>
-	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-5.4.2.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/G:/Java/lib/JXBrowser/doc/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
