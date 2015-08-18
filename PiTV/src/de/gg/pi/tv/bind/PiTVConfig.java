@@ -66,17 +66,21 @@ public class PiTVConfig {
 			// Hex Color Code.
 			if(cs.startsWith("#")) {
 				String cn = cs.substring(1);
-				if(cn.length()==6) {
+				if(cn.length()==6||cn.length()==8) {
 					
 					String cr = cn.substring(0, 2);
-					String cg = cn.substring(1, 3);
-					String cb = cn.substring(3, 5);
+					String cg = cn.substring(2, 4);
+					String cb = cn.substring(4, 6);
+					String ca = "ff";
+					if(cn.length()==8)
+						ca = cn.substring(6, 8);
 					
 					int r = Integer.parseInt(cr, 16);
 					int g = Integer.parseInt(cg, 16);
 					int b = Integer.parseInt(cb, 16);
+					int a = Integer.parseInt(ca, 16);
 					
-					c = new Color(r, g, b);
+					c = new Color(r, g, b, a);
 					
 				} else throw new NumberFormatException("Hex Color Code unsupported Format!");
 			}

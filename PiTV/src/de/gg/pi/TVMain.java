@@ -3,6 +3,7 @@
  */
 package de.gg.pi;
 
+import java.awt.Color;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -57,10 +58,8 @@ public class TVMain {
 		
 		tv = PiTV.newInstance();
 		
-		
-		
 		try {
-			System.out.print("Loading Activities... ");
+			System.out.print("Loading Configuration... ");
 			loadConfig();
 			System.out.println("\nDone.");
 			tv.start();
@@ -139,8 +138,8 @@ public class TVMain {
 					}
 				}
 			}
-			
-			tv.setBackgroundColor(list.getBackground());
+			Color bg = list.getBackground();
+			tv.setBackgroundColor(bg);
 		}catch(Exception ex) {
 			if(DEBUG) {
 				ex.printStackTrace();

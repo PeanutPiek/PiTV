@@ -10,12 +10,15 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -55,7 +58,16 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 	private ArrayList<GridData<T>> valueList;
 	
 	
-	private JPanel gridMenu;
+	private final JPanel gridMenu = new JPanel();
+	
+	
+	private GridData<T> selectedData;
+	
+	
+	private final JPanel[] placeholder = new JPanel[] {new JPanel(), new JPanel(), new JPanel()};
+	
+	
+	private final JPanel footer = new JPanel();
 	
 	
 	public MenuGridBoard(int rows, int cols) {
@@ -64,16 +76,26 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		
 		valueList = new ArrayList<GridData<T>>();
 		
-		gridMenu = new JPanel();
+//		gridMenu = new JPanel()
 		gridMenu.setLayout(new GridLayout(rows, cols, HGAP, VGAP));
 		
 		setLayout(new BorderLayout());
 		add(gridMenu, BorderLayout.CENTER);
 		
-		add(new JPanel(), BorderLayout.NORTH);
-		add(new JPanel(), BorderLayout.SOUTH);
-		add(new JPanel(), BorderLayout.WEST);
-		add(new JPanel(), BorderLayout.EAST);
+		add(placeholder[0], BorderLayout.NORTH);
+		add(footer, BorderLayout.SOUTH);
+		add(placeholder[1], BorderLayout.WEST);
+		add(placeholder[2], BorderLayout.EAST);
+	}
+	
+	
+	public void setFooterText(String text) {
+		JLabel label = new JLabel(text);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		int co = getBackground().getRGB();
+		int ci = (0x00FFFFFF - (co | 0xFF000000)) | (co & 0xFF000000); 
+		label.setForeground(new Color(ci));
+		footer.add(label);
 	}
 	
 	
@@ -93,15 +115,25 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		
 		gridMenu.removeAll();
 		int w = 0;
-		for(int j = 0; j < l - i; ++j) {
+		for(int j = 0; j < Math.min(l - i, elementsPerPage); ++j) {
 			if(j>=length&&length>0) break;
-			GridData<T> a = valueList.get(j + i);
+			final GridData<T> a = valueList.get(j + i);
 			
 			ImageIcon img = null;
 			if(a.getIcon()!=null) {
 				img = new ImageIcon(a.getIcon());
 			}
-			JButton abtn = new JButton(a.getName(), img);
+			final MenuButton abtn = new MenuButton(a.getName(), img);
+			abtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					abtn.glow(true);
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					abtn.glow(false);
+				}
+			});
 			abtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -115,11 +147,26 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		}
 		for(int v = 0; v < elementsPerPage - w; ++v) {
 			JPanel dummy = new JPanel();
-			dummy.setBorder(BorderFactory.createLineBorder(Color.black));
+//			dummy.setBorder(BorderFactory.createLineBorder(Color.black));
+			dummy.setBackground(getBackground());
 			gridMenu.add(dummy);
 		}
 		
 		validate();
+	}
+	
+	
+	@Override
+	public void setBackground(Color bg) {
+		super.setBackground(bg);
+		if(gridMenu!=null)
+			gridMenu.setBackground(bg);
+		if(placeholder!=null) {
+			for(JPanel p : placeholder)
+				p.setBackground(bg);
+		}
+		if(footer!=null)
+			footer.setBackground(bg);
 	}
 	
 	

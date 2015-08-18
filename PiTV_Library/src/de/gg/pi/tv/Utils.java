@@ -23,12 +23,23 @@ import org.apache.commons.io.IOUtils;
  */
 public class Utils {
 	
+	/**
+	 * 
+	 */
+	private static Utils _instance = null;
 	
-	
-	
+	/**
+	 * 
+	 */
 	private Utils() { }
 	
-	
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
 	public String readFile(String file) throws IOException, FileNotFoundException {
 		FileNotFoundException fileNotFound = new FileNotFoundException("File " + file + " does not exists!");
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -39,25 +50,33 @@ public class Utils {
 		BufferedReader reader = new BufferedReader( new FileReader (f) );
 		String line = null;
 		StringBuilder sb = new StringBuilder();
-		
+		// Read File Content.
 		while( ( line = reader.readLine() ) != null ) sb.append( line );
-		
+		// Return File Content.
 		return sb.toString();
 	}
 	
-	
-	public static Utils getToolkit() { return new Utils(); }
+	/**
+	 * 
+	 * @return
+	 */
+	public static Utils getToolkit() {
+		if(_instance==null) _instance = new Utils();
+		return _instance; 
+	}
 
-	
+	/**
+	 * 
+	 * @param source
+	 * @return
+	 */
 	public static String loadExternalSource(String source) {
 		InputStream in = null;
 		try {
 			URL url = new URL(source);
 			in = url.openStream();
 			String ext = IOUtils.toString(in);
-			
 			return ext;			
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

@@ -43,6 +43,11 @@ public class PiTV implements Runnable {
 	/**
 	 * 
 	 */
+	public static final Color DEFAULT_BACKGROUND_COLOR = Color.BLACK;
+	
+	/**
+	 * 
+	 */
 	private static final long RENDERING_INTERVAL = 50;
 
 	/**
@@ -150,6 +155,7 @@ public class PiTV implements Runnable {
 		screen.setSize(screen_dimension.width, screen_dimension.height);
 		screen.setUndecorated(true);
 		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		screen.getContentPane().setBackground(DEFAULT_BACKGROUND_COLOR);
 		
 		aspect_ratio = screen.getWidth() / screen.getHeight();
 		
@@ -198,6 +204,8 @@ public class PiTV implements Runnable {
 
 			}
 		};
+		String footText = "PiTV [" + TVMain.VERSION + ((TVMain.DEBUG)?"/Debug":"") + "] IR_Enabled: " + TVMain.IR_ENABLED;
+		((MenuGridBoard<ActivityIcon>)page).setFooterText(footText);
 		
 		screen.getContentPane().add(page, BorderLayout.CENTER);
 		// right Button to go to next Page.
@@ -316,7 +324,7 @@ public class PiTV implements Runnable {
 	 * 
 	 */
 	public void fillGrid() {
-		fillGrid(0, 0);
+		fillGrid(0, elementsPerPage);
 	}
 	
 	/**
@@ -324,7 +332,7 @@ public class PiTV implements Runnable {
 	 * @param offset
 	 */
 	public void fillGrid(int offset) {
-		fillGrid(offset, 0);
+		fillGrid(offset, elementsPerPage);
 	}
 	
 	/**
@@ -385,6 +393,11 @@ public class PiTV implements Runnable {
 	
 	public void setBackgroundColor(Color background) {
 		this.backgroundColor = background;
+		screen.getContentPane().setBackground(backgroundColor);
+		page.setBackground(backgroundColor);
+		page.invalidate();
+		page.validate();
+		page.repaint();
 	}
 
 	@Override

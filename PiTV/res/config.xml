@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PiTVConfig>
-	<backgroundcolor>#ff0000</backgroundcolor>
+	<backgroundcolor>#3c2c5c</backgroundcolor>
 	<IRControl type="in" gpio="23" />
 	<IRControl type="out" gpio="22" />
 	<Activities>
