@@ -21,6 +21,9 @@ public class GridData<T extends GridValue> {
 	
 	
 	private Vector2 origin;
+
+
+	private DataHandler dataHandler;
 	
 	
 	
@@ -63,5 +66,15 @@ public class GridData<T extends GridValue> {
 
 	public void call() {
 		data.call();
+	}
+
+
+	public void setDataHandler(DataHandler handler) {
+		this.dataHandler = handler;
+	}
+
+
+	public DataHandler getHandler() {
+		return dataHandler;
 	}
 }

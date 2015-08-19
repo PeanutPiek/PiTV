@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -77,7 +78,8 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		valueList = new ArrayList<GridData<T>>();
 		
 //		gridMenu = new JPanel()
-		gridMenu.setLayout(new GridLayout(rows, cols, HGAP, VGAP));
+//		gridMenu.setLayout(new GridLayout(rows, cols, HGAP, VGAP));
+		gridMenu.setLayout(null);
 		
 		setLayout(new BorderLayout());
 		add(gridMenu, BorderLayout.CENTER);
@@ -86,6 +88,8 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		add(footer, BorderLayout.SOUTH);
 		add(placeholder[1], BorderLayout.WEST);
 		add(placeholder[2], BorderLayout.EAST);
+		
+		setDoubleBuffered(true);
 	}
 	
 	
@@ -106,49 +110,83 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 	}
 	
 	
-	public void fillGrid(int offset, int length, int elementsPerPage) {
-		int i = 0, wx = 0, hx = 0;
+	public GridData<T> getSelectedData() {
+		return selectedData;
+	}
+	
+	
+	public void fillGrid(int offset, int length, int rows, int cols) {
+		int i = 0;
 		int l = valueList.size();
 		if(l>offset&&offset>0) {
 			i = offset;
 		}
+		int elementsPerPage = rows * cols;
+		int posOffset = 0;
+		int hgap = 5;
+		int vgap = 5;
+		int w = 0;
+		int width = gridMenu.getWidth();
+		int height = gridMenu.getHeight();
 		
 		gridMenu.removeAll();
-		int w = 0;
-		for(int j = 0; j < Math.min(l - i, elementsPerPage); ++j) {
-			if(j>=length&&length>0) break;
-			final GridData<T> a = valueList.get(j + i);
-			
-			ImageIcon img = null;
-			if(a.getIcon()!=null) {
-				img = new ImageIcon(a.getIcon());
+		
+		for(int k = 0; k < rows; ++k) {
+			for(int j = 0; j < cols; ++j) {
+				if(j>=length&&length>0) break;
+				int ii = k*cols+j;
+				final GridData<T> a = valueList.get(ii + i);
+				
+				ImageIcon img = null;
+				if(a.getIcon()!=null) {
+					img = new ImageIcon(a.getIcon());
+				}
+				final MenuButton abtn = new MenuButton(a.getName(), img) {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						super.mouseEntered(e);
+						selectedData = a;
+					}
+					@Override
+					public void mouseExited(MouseEvent arg0) {
+						super.mouseExited(arg0);
+						selectedData = null;
+					}
+				};
+				a.setDataHandler(abtn);
+				
+				int awi = width / cols;
+				int ahi = height / rows;
+				
+				int ax = posOffset + j * awi + j * hgap;
+				int ay = posOffset + k * ahi + k * vgap;
+				int aw = (width / cols) - (cols * hgap);
+				int ah = (height / rows) - (rows * hgap);
+				
+				abtn.setBounds(ax, ay, aw, ah);
+				abtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						handleMenu(a.getData(), OPEN);
+						a.call();
+					}
+				});
+				
+				gridMenu.add(abtn);
+				gridMenu.validate();
+				w++;
 			}
-			final MenuButton abtn = new MenuButton(a.getName(), img);
-			abtn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					abtn.glow(true);
-				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-					abtn.glow(false);
-				}
-			});
-			abtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					handleMenu(a.getData(), OPEN);
-					a.call();
-				}
-			});
-			
-			gridMenu.add(abtn);
-			w++;
 		}
+		// Fill the rest of the Board with Dummy Patches.
 		for(int v = 0; v < elementsPerPage - w; ++v) {
 			JPanel dummy = new JPanel();
 //			dummy.setBorder(BorderFactory.createLineBorder(Color.black));
 			dummy.setBackground(getBackground());
+			dummy.setBounds(posOffset + v * width, posOffset + v * height, width, height);
 			gridMenu.add(dummy);
 		}
 		
@@ -187,8 +225,6 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		
-		
 		
 	}
 	

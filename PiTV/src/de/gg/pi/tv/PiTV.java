@@ -17,11 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.gg.pi.TVMain;
+import de.gg.pi.tv.bind.Activity;
 import de.gg.pi.tv.ir.CodeListener;
 import de.gg.pi.tv.ir.IRController;
 import de.gg.pi.tv.ir.IRController.IRCode;
 import de.gg.pi.tv.menu.ActivityIcon;
 import de.gg.pi.tv.menu.Cursor;
+import de.gg.pi.tv.menu.GridData;
 import de.gg.pi.tv.menu.MenuGridBoard;
 
 import javax.swing.JButton;
@@ -48,7 +50,7 @@ public class PiTV implements Runnable {
 	/**
 	 * 
 	 */
-	private static final long RENDERING_INTERVAL = 50;
+	private static final long RENDERING_INTERVAL = 15;
 
 	/**
 	 * Instance of the PiTV Object, to hold this Class as Singleton.
@@ -117,6 +119,9 @@ public class PiTV implements Runnable {
 	
 	
 	private boolean activ = false;
+	
+	
+	private ItemCursor cursor;
 	
 	/**
 	 * 
@@ -206,6 +211,15 @@ public class PiTV implements Runnable {
 		};
 		String footText = "PiTV [" + TVMain.VERSION + ((TVMain.DEBUG)?"/Debug":"") + "] IR_Enabled: " + TVMain.IR_ENABLED;
 		((MenuGridBoard<ActivityIcon>)page).setFooterText(footText);
+		cursor = new ItemCursor(Color.WHITE) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+		};
+//		page.add(cursor);
 		
 		screen.getContentPane().add(page, BorderLayout.CENTER);
 		// right Button to go to next Page.
@@ -344,7 +358,7 @@ public class PiTV implements Runnable {
 		System.out.println("Fill Activity Grid...");
 		int w = length - offset;
 //		((MenuGridBoard<ActivityIcon>) page).clearGrid();
-		((MenuGridBoard<ActivityIcon>) page).fillGrid(offset, length, elementsPerPage);
+		((MenuGridBoard<ActivityIcon>) page).fillGrid(offset, length, rows, cols);
 //		((MenuGridBoard<ActivityIcon>) page).repaint();
 		screen.repaint();
 		System.out.println("Done.");
@@ -404,7 +418,14 @@ public class PiTV implements Runnable {
 	public void run() {
 		while(activ) {
 //			((MenuGridBoard<ActivityIcon>) page).fillGrid(0, activities.size(), elementsPerPage);
-			screen.setBackground(backgroundColor);
+			GridData<?> sd = ((MenuGridBoard<ActivityIcon>) page).getSelectedData();
+			if(cursor!=null) {
+				if(sd!=null) {
+					cursor.selectComponent(sd.getHandler().getObject());
+				} else {
+					cursor.selectComponent(null);
+				}
+			}
 			screen.repaint();
 			try {
 				Thread.sleep(RENDERING_INTERVAL);
