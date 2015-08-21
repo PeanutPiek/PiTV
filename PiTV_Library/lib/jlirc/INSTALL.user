@@ -1,0 +1,23 @@
+Installation instructions for jlirc
+
+
+Requirements
+
+Linux:
+
+	- a Java Runtime Enviroment (JRE) (>= 1.2.2)
+
+	- LIRC (http://www.lirc.org/) should be installed and running for you to be able
+	  to use jlirc
+
+Windows:
+	- a Java Runtime Enviroment (JRE) (>= 1.2.2)
+
+	- WinLIRC (http://home.jtan.com/~jim/winlirc/) should be installed and running for you
+	  to be able to use jlirc
+
+
+
+Installing
+
+Put the 'org' directory somewhere on your CLASSPATH (or add its location to the CLASSPATH)

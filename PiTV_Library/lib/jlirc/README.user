@@ -1,0 +1,27 @@
+jlirc is a Java API for communcation with the LIRC and WinLIRC daemons,
+which are used to receive (and send) IR-sgnals.
+
+For more information see http://jlirc.sourceforge.net/.
+
+Files:
+
+INSTALL.user - Installation instructions
+LICENSE - The GPL
+
+
+
+############################################################
+#
+# Copyright (C) 2001 Bjorn Bringert (bjorn@mumblebee.com)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+############################################################

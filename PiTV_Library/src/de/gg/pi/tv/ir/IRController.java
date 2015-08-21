@@ -3,11 +3,8 @@
  */
 package de.gg.pi.tv.ir;
 
-
-import org.lirc.*;
-
-import de.gg.pi.TVMain;
-import de.gg.pi.tv.ir.CodeListener;
+import org.lirc.LIRCClient;
+import org.lirc.LIRCException;
 
 /**
  * This Class declares a Controller Interface for an IR Receiver to read IR Signals.
@@ -123,12 +120,8 @@ public class IRController {
 			
 			System.out.println("Done.");
 		} catch(Exception ex) {
-			if(TVMain.DEBUG) {
-				System.out.println("");
-				ex.printStackTrace();
-			} else {
-				System.err.println(ex.getMessage());
-			}
+			System.out.println("");
+			ex.printStackTrace();
 		}
 		
 		return controller;

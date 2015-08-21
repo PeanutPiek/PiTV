@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PiTVConfig>
+	<backgroundcolor>#3c2c5c</backgroundcolor>
+	<IRControl type="in" gpio="23" />
+	<IRControl type="out" gpio="22" />
+	<Activities>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="Twitch">
+			<IconImagePath>twitch-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TwitchActivity</ActivityClass>
+			<Executable>TwitchActivity</Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+		<Activity name="ClassTest">
+			<IconImagePath>empty-icon.png</IconImagePath>
+			<ActivityClass>de.gg.pi.tv.app.TestActivity</ActivityClass>
+			<Executable></Executable>
+		</Activity>
+	</Activities>
+</PiTVConfig>

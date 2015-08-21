@@ -6,8 +6,6 @@ package de.gg.pi.tv.ir;
 import org.lirc.LIRCEvent;
 import org.lirc.LIRCListener;
 
-import de.gg.pi.tv.ir.IRController.IRCode;
-
 /**
  * @author PeanutPiek
  *
