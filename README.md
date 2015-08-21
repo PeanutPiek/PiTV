@@ -7,7 +7,9 @@ The PiTV Wiki provides any kind of Informations about how to handle the Software
 
 Basic Functions:
   - The PiTV offers some basic Application within, including following Apps:
-    - Twitch, Which allows you to view any Twitch Stream on your TV.
+    - Twitch, which allows you to view any Twitch Stream on your TV.
+    - Youtube, which allows you to View simple Youtube Videos on your TV.
+    - A simple Web Browser, optimized for IR Control.
     - There will be some more Applications, but it is firstly developed for this Twitch App.
   - Full Support for different kinds of IR Remote Control
 
