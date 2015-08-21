@@ -1,17 +1,19 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu;
+package de.gg.pi.tv.menu.page.grid;
 
 import java.awt.Image;
 
+import de.gg.pi.tv.menu.page.MenuObject;
+import de.gg.pi.tv.menu.page.data.DataHandler;
 import de.gg.pi.tv.menu.utils.Vector2;
 
 /**
  * @author PeanutPiek
  *
  */
-public class GridData<T extends GridValue> {
+public class GridData<T extends MenuObject> {
 	
 	
 	private T data;

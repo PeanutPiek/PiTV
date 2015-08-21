@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -22,9 +24,10 @@ import de.gg.pi.tv.ir.CodeListener;
 import de.gg.pi.tv.ir.IRController;
 import de.gg.pi.tv.ir.IRController.IRCode;
 import de.gg.pi.tv.menu.ActivityIcon;
-import de.gg.pi.tv.menu.Cursor;
-import de.gg.pi.tv.menu.GridData;
-import de.gg.pi.tv.menu.MenuGridBoard;
+import de.gg.pi.tv.menu.ItemCursor;
+import de.gg.pi.tv.menu.page.Cursor;
+import de.gg.pi.tv.menu.page.grid.GridData;
+import de.gg.pi.tv.menu.page.grid.MenuGridBoard;
 
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
@@ -121,7 +124,6 @@ public class PiTV implements Runnable {
 	private boolean activ = false;
 	
 	
-	private ItemCursor cursor;
 	
 	/**
 	 * 
@@ -182,22 +184,7 @@ public class PiTV implements Runnable {
 				boolean visible = true;
 				if(state==OPEN) {
 					// Activity is opened.
-					switch(a.getType()) {
-					case FULLSCREEN:
-						// Application should opened in Fullscreen mode.
-						visible = false;
-						break;
-					case NO_SCREEN:
-						// Application should opened without Screen.
-						visible = false;
-						break;
-					case LAYERED_SCREEN:
-						// Application should opened in Layered Screen.
-						visible = true;
-						break;
-					default:
-						break;
-					}
+					visible = false;
 				}
 				if(state==CLOSE) {
 					// Activity is closed.
@@ -211,15 +198,40 @@ public class PiTV implements Runnable {
 		};
 		String footText = "PiTV [" + TVMain.VERSION + ((TVMain.DEBUG)?"/Debug":"") + "] IR_Enabled: " + TVMain.IR_ENABLED;
 		((MenuGridBoard<ActivityIcon>)page).setFooterText(footText);
-		cursor = new ItemCursor(Color.WHITE) {
+		ItemCursor cursor = new ItemCursor(Color.WHITE) {
 
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void paint(Graphics g, int x, int y, int w, int h) {
+				double p = 0.15;
+				double lw = w * p;
+				double lh = h * p;
+				
+				Graphics2D g2 = (Graphics2D)g.create();
+
+				g2.setColor(mainColor);
+				// Paint left top Triangle.
+				g2.fillRect(0, 0, (int) lw, 5);
+				g2.fillRect(0, 0, 5, (int) lh);
+				// Paint right top Triangle.
+				g2.fillRect((int) (w - lw), 0, (int)lw, 5);
+				g2.fillRect(w - 5, 0, 5, (int) lh);
+				// Paint left bottom Triangle.
+				g2.fillRect(0, h - 5, (int) lw, 5);
+				g2.fillRect(0, (int) (h -lh), 5, (int) lh);
+				// Paint right bottom Triangle.
+				g2.fillRect((int) (w - lw), (int) (h - 5),(int) lw, 5);
+				g2.fillRect((int) (w - 5), (int) (h - lh), 5, (int) lh);
+				
+				g2.dispose();
+			}
 			
 		};
-//		page.add(cursor);
+		((MenuGridBoard<ActivityIcon>)page).setCursour(cursor);
 		
 		screen.getContentPane().add(page, BorderLayout.CENTER);
 		// right Button to go to next Page.
@@ -418,14 +430,6 @@ public class PiTV implements Runnable {
 	public void run() {
 		while(activ) {
 //			((MenuGridBoard<ActivityIcon>) page).fillGrid(0, activities.size(), elementsPerPage);
-			GridData<?> sd = ((MenuGridBoard<ActivityIcon>) page).getSelectedData();
-			if(cursor!=null) {
-				if(sd!=null) {
-					cursor.selectComponent(sd.getHandler().getObject());
-				} else {
-					cursor.selectComponent(null);
-				}
-			}
 			screen.repaint();
 			try {
 				Thread.sleep(RENDERING_INTERVAL);

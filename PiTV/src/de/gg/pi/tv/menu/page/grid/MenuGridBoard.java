@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu;
+package de.gg.pi.tv.menu.page.grid;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,12 +22,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.gg.pi.tv.menu.ItemCursor;
+import de.gg.pi.tv.menu.MenuBoard;
+import de.gg.pi.tv.menu.page.MenuButton;
+import de.gg.pi.tv.menu.page.MenuObject;
+
 
 /**
  * @author PeanutPiek
  *
  */
-public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
+public abstract class MenuGridBoard<T extends MenuObject> extends MenuBoard<T> {
 
 	/**
 	 * 
@@ -56,7 +61,7 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 	private int columnCount;
 	
 	
-	private ArrayList<GridData<T>> valueList;
+	private ArrayList<GridData<T>> valueList = new ArrayList<GridData<T>>();
 	
 	
 	private final JPanel gridMenu = new JPanel();
@@ -71,28 +76,41 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 	private final JPanel footer = new JPanel();
 	
 	
+	private ItemCursor itemCursor;
+	
+	/**
+	 * 
+	 * @param rows
+	 * @param cols
+	 */
 	public MenuGridBoard(int rows, int cols) {
+		super();
+		
 		rowCount = rows;
 		columnCount = cols;
 		
-		valueList = new ArrayList<GridData<T>>();
-		
-//		gridMenu = new JPanel()
-//		gridMenu.setLayout(new GridLayout(rows, cols, HGAP, VGAP));
+		// Set Absolute Layout for Grid.
 		gridMenu.setLayout(null);
-		
+		// Use BorderLayout for Menu.
 		setLayout(new BorderLayout());
+		// Add Grid in the Center of Menu.
 		add(gridMenu, BorderLayout.CENTER);
-		
+		// Add Placeholder in Top of Menu.
 		add(placeholder[0], BorderLayout.NORTH);
+		// Add Footer in Bottom of Menu.
 		add(footer, BorderLayout.SOUTH);
+		// Add Placeholder in left of Menu.
 		add(placeholder[1], BorderLayout.WEST);
+		// Add Placeholder in right of Menu.
 		add(placeholder[2], BorderLayout.EAST);
-		
+		// Activate Double Buffer.
 		setDoubleBuffered(true);
 	}
 	
-	
+	/**
+	 * 
+	 * @param text
+	 */
 	public void setFooterText(String text) {
 		JLabel label = new JLabel(text);
 		label.setHorizontalAlignment(JLabel.CENTER);
@@ -102,19 +120,31 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		footer.add(label);
 	}
 	
-	
+	/**
+	 * 
+	 * @param val
+	 */
 	public void addValue(T val) {
 		int left = -1, top = -1;
 		GridData<T> gd = new GridData<T>(val, left, top);
 		valueList.add(gd);
 	}
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public GridData<T> getSelectedData() {
 		return selectedData;
 	}
 	
-	
+	/**
+	 * 
+	 * @param offset
+	 * @param length
+	 * @param rows
+	 * @param cols
+	 */
 	public void fillGrid(int offset, int length, int rows, int cols) {
 		int i = 0;
 		int l = valueList.size();
@@ -157,6 +187,7 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 						selectedData = null;
 					}
 				};
+				abtn.setItemCursor(itemCursor);
 				a.setDataHandler(abtn);
 				
 				int awi = width / cols;
@@ -207,7 +238,9 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 			footer.setBackground(bg);
 	}
 	
-	
+	/**
+	 * 
+	 */
 	public void clearGrid() {
 		
 		int i = gridMenu.getComponentCount();
@@ -228,7 +261,19 @@ public abstract class MenuGridBoard<T extends GridValue> extends JPanel {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @param obj
+	 * @param state
+	 */
 	protected abstract void handleMenu(T obj, int state);
+
+	/**
+	 * 
+	 * @param cursor
+	 */
+	public void setCursour(ItemCursor cursor) {
+		this.itemCursor = cursor;
+	}
 	
 }

@@ -17,7 +17,7 @@ public class EmptyActivity extends TVActivity {
 	
 	
 	public EmptyActivity() {
-		super("", "res/icon/empty-icon.png", ActivityType.NO_SCREEN);
+		super("", "res/icon/empty-icon.png");
 		
 	}
 

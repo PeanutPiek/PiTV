@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu;
+package de.gg.pi.tv.menu.page.data;
 
 import javax.swing.JComponent;
 
@@ -15,6 +15,7 @@ public interface DataHandler {
 	
 	public JComponent getObject();
 
-
+	
+	public void select(boolean s);
 	
 }

@@ -6,12 +6,13 @@ package de.gg.pi.tv.menu;
 import java.awt.Image;
 
 import de.gg.pi.tv.TVActivity;
+import de.gg.pi.tv.menu.page.MenuObject;
 
 /**
  * @author PeanutPiek
  *
  */
-public class ActivityIcon extends GridValue {
+public class ActivityIcon extends MenuObject {
 
 	
 	private TVActivity activity;

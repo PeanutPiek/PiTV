@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import de.gg.pi.Library;
 
@@ -12,7 +14,7 @@ import de.gg.pi.Library;
  * This Class provides the basic Object of a PiTV Activity.
  * An Activity is any On-Screen Routine which is callable from the App Menu.
  * An On-Screen Routine describes any Subprogram, which is called as Application on 
- * the PiTV. Application really means Application, beacause only .JAR Files are called.
+ * the PiTV. Application really means Application, because only .JAR Files are called.
  * 
  * @author PeanutPiek
  *
@@ -32,11 +34,6 @@ public abstract class TVActivity {
 	private int id;
 	
 	/**
-	 * 
-	 */
-	private ActivityType typeOf;
-	
-	/**
 	 * Name of the Activity.
 	 */
 	protected String name = null;
@@ -45,12 +42,7 @@ public abstract class TVActivity {
 	 * Icon of the Activity.
 	 */
 	protected Image icon = null;
-	
-	
-	
-	
-	
-	
+
 	
 	/**
 	 * 
@@ -64,26 +56,26 @@ public abstract class TVActivity {
 		if(!iconUrl.isEmpty())
 			setIcon(iconUrl);
 		
-		typeOf = ActivityType.FULLSCREEN;
 		
-		
-	}
-	
-	
-	protected TVActivity(String name) {
-		this(name, "");
 	}
 	
 	/**
 	 * 
 	 * @param name
-	 * @param iconUrl
-	 * @param type
+	 * @param icon
 	 */
-	protected TVActivity(String name, String iconUrl, ActivityType type) {
-		this(name, iconUrl);
+	protected TVActivity(String name, Image icon) {
+		this(name);
 		
-		typeOf = type;
+		this.icon = icon;
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 */
+	protected TVActivity(String name) {
+		this(name, "");
 	}
 	
 	
@@ -93,6 +85,14 @@ public abstract class TVActivity {
 	 */
 	public void setIcon(String iconImagePath) {
 		File iconFile = new File(iconImagePath);
+		loadIcon(iconFile);
+	}
+	
+	/**
+	 * 
+	 * @param iconFile
+	 */
+	private void loadIcon(File iconFile) {
 		if(iconFile.exists()) {
 			try {
 				icon = ImageIO.read(iconFile);
@@ -127,14 +127,6 @@ public abstract class TVActivity {
 	 */
 	public String getName() {
 		return name;
-	}
-	
-	/**
-	 * Returns the Activity Type of this Activity.
-	 * @return the Type of this Activity.
-	 */
-	public ActivityType getType() {
-		return typeOf;
 	}
 	
 	/**

@@ -1,8 +1,9 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu;
+package de.gg.pi.tv.menu.page;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -17,6 +18,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import de.gg.pi.TVMain;
+import de.gg.pi.tv.menu.ItemCursor;
+import de.gg.pi.tv.menu.page.data.DataHandler;
 
 /**
  * @author PeanutPiek
@@ -32,6 +35,9 @@ public class MenuButton extends JButton implements DataHandler, MouseListener {
 	public static final Color DEFAULT_BUTTON_COLOR = new Color(238, 238, 238);
 	
 	
+	public static final Color DEFAULT_BORDER_COLOR = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+	
+	
 	public static final int HARC = 150;
 	
 	
@@ -44,12 +50,15 @@ public class MenuButton extends JButton implements DataHandler, MouseListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	
-	private boolean isGlowing = false;
 	
 	
 	private Color glowColor = DEFAULT_GLOW_COLOR;
+	
+	
+	private boolean selected = false;
+	
+	
+	private ItemCursor itemCursor;
 	
 	
 	
@@ -86,6 +95,11 @@ public class MenuButton extends JButton implements DataHandler, MouseListener {
 	    g2.fillRoundRect(0, 0, getWidth(), getHeight(), HARC, VARC);
 	    g2.setPaint(Color.BLACK);
 	    g2.drawString(getText(), (int) w / 3 , (int) h / 2);
+	    
+	    if(selected) {
+	    	itemCursor.paint(g, x, y,(int) w,(int) h);
+	    }
+	    
 	    g2.dispose();
 		
 	}
@@ -95,15 +109,15 @@ public class MenuButton extends JButton implements DataHandler, MouseListener {
 	 * Additional call the repaint Method of the Component.
 	 * @param glow	state if should Glow.
 	 */
-	private void setGlowing(boolean glow) {
-		isGlowing = glow;
+	private void focus(boolean glow) {
+		selected = glow;
 		repaint();
 	}
 	
 	
 	@Override
 	protected void paintBorder(Graphics g) {
-		if(isGlowing) {
+		if(selected) {
 			super.paintBorder(g);
 		}
 	}
@@ -116,14 +130,14 @@ public class MenuButton extends JButton implements DataHandler, MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		if(TVMain.DEBUG) System.out.println("Mouse entered: " + this);
-		setGlowing(true);
+		focus(true);
 	}
 
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		if(TVMain.DEBUG) System.out.println("Mouse exited: " + this);
-		setGlowing(false);
+		focus(false);
 	}
 
 
@@ -138,6 +152,17 @@ public class MenuButton extends JButton implements DataHandler, MouseListener {
 	@Override
 	public JComponent getObject() {
 		return this;
+	}
+
+
+	public void setItemCursor(ItemCursor itemCursor) {
+		this.itemCursor = itemCursor;
+	}
+
+
+	@Override
+	public void select(boolean s) {
+		focus(s);
 	}
 
 }

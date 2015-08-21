@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu;
+package de.gg.pi.tv.menu.page;
 
 import java.awt.Image;
 
@@ -9,7 +9,7 @@ import java.awt.Image;
  * @author PeanutPiek
  *
  */
-public abstract class GridValue {
+public abstract class MenuObject {
 
 	
 	/**

@@ -5,14 +5,25 @@ package de.gg.pi;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.annotation.Documented;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import de.gg.pi.tv.PiTV;
 import de.gg.pi.tv.TVActivity;
+import de.gg.pi.tv.Utils;
 import de.gg.pi.tv.bind.Activity;
 import de.gg.pi.tv.bind.PiTVConfig;
 
@@ -46,6 +57,17 @@ public class TVMain {
 	public static final boolean IR_ENABLED = false;
 	
 	/**
+	 * Default Log File.
+	 */
+	public static final String DEFAULT_LOG = "pitv_default.log";
+	
+	/**
+	 * Default Error Log File.
+	 */
+	public static final String DEFAULT_ERROR = "pitv_default.err";
+	
+	
+	/**
 	 * PiTV Object, which declares the interactable Application Context.
 	 */
 	private PiTV tv;
@@ -58,6 +80,14 @@ public class TVMain {
 		
 		tv = PiTV.newInstance();
 		
+		
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void setupAndRun() {
 		try {
 			System.out.print("Loading Configuration... ");
 			loadConfig();
@@ -71,7 +101,6 @@ public class TVMain {
 				System.err.println(ex.getMessage());
 			}
 		}
-		
 	}
 	
 	/**
@@ -84,7 +113,7 @@ public class TVMain {
 		// Get default XML File Activity List.
 		File xmlFile = new File("res/config.xml");
 		// If the XML File does not exists, exit with Error.
-		if(!xmlFile.exists()) throw new IllegalAccessError("No Activity List File found!");
+		if(!xmlFile.exists()) throw new IllegalAccessError("No Config File found!");
 		try {
 			JAXBContext jaxb = JAXBContext.newInstance(PiTVConfig.class);
 			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
@@ -151,18 +180,131 @@ public class TVMain {
 	
 	
 	
+	
+	
+	/**
+	 * Runs the Installation of the PiTV, which creates all
+	 * nesessary Folders and extract all default Files in to
+	 * the Installation Directory.
+	 * @return	state of Installation is done without Errors.
+	 * @throws IOException	Throws an IOException, in case of any Error, creating
+	 * 						a Folder or File.
+	 */
+	private boolean installPiTV() throws IOException {
+		
+		int chk = 0;
+		int err = 0;
+		
+		File root = new File(TVMain.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+		
+		// Activity Folder.
+		File actFolder = new File(root.getAbsolutePath() + "/act");
+		// Create Activity Folder.
+		if(actFolder.exists()) chk++;
+		else actFolder.mkdirs();
+		
+		// Extract Default Config File.
+		File configFile = new File(root.getAbsolutePath() + "/config.xml");
+		String basicConfigContent = Utils.getToolkit().readFile("de/gg/pi/tv/basic/config/config.xml");
+		
+		if(!configFile.exists()) {
+			if(!configFile.createNewFile()) {
+				System.err.println("Can not create Default Configuration File!");
+				err++;
+			} else {
+				System.out.println("Default Configuration File created.");
+				
+				FileWriter fw = new FileWriter(configFile);
+				fw.write(Utils.prettyFormat(basicConfigContent, 5));
+				fw.flush();
+				
+				fw.close();
+			}
+		} else chk++;
+		
+		
+		if(chk==0&&err==0) return true;
+		// 
+		return false;
+	}
+	
+	
+	private void reinstallPiTV() {
+		
+	}
+	
+	
+	
+	
 	/**
 	 * Entry Point of PiTV Application.
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		boolean forceInstall = false,
+				forceReinstall = false,
+				printHelp = false;
+		String  logPath = DEFAULT_LOG,
+				errPath = DEFAULT_ERROR;
 		
+		for(String a : args) {
+			
+			if(a.equals("-i")||a.equals("--install")) {
+				forceInstall = true;
+			}
+			else
+			if(a.equals("-r")||a.equals("--reinstall")) {
+				forceReinstall = true;
+			}
+			else
+			if(a.equals("-h")||a.equals("--help")) {
+				printHelp = true;
+			}
+		}
 		
-		// Main Instance to hold the Application Context.
-		TVMain main = new TVMain();		
+		try {
+			
+			if(printHelp) {
+				System.out.println(getHelpText());
+			}
+			else {
+				// Main Instance to hold the Application Context.
+				TVMain main = new TVMain();		
+				if(forceInstall) {
+					main.installPiTV();
+				}
+				
+				main.setupAndRun();
+				
+				// Change Default Output Stream.
+				System.setOut(Utils.createPrintStream(TVMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/" + logPath));
+				// Change Default Error Stream.
+				System.setErr(Utils.createPrintStream(TVMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/" + errPath));
+			
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		
-		
+	}
+	
+	/**
+	 * Prints the Argument Help Context for this Application.
+	 * @return	the Help Context for this Application.
+	 */
+	private static String getHelpText() {
+		String help = "\n";
+		help += "---- PiTV Console Help Context ----\n";
+//		help += "\n";
+		help += "Arg	ArgAlt		Definition\n";
+		help += "--------------------------------------\n";
+		help += "-i	--install	: Start the Installation of PiTV.\n";
+		help += "-r	--reinstall	: Start a Reinstallation. Maybe nesessary for Update.\n";
+		help += "-h	--help		: Prints this Help Context.\n";
+		help += "\n";
+		// Return Help Context.
+		return help;
 	}
 
 }

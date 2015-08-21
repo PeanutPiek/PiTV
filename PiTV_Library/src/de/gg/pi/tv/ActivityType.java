@@ -10,5 +10,6 @@ package de.gg.pi.tv;
 public enum ActivityType {
 	FULLSCREEN,
 	NO_SCREEN,
-	LAYERED_SCREEN
+	LAYERED_SCREEN,
+	SIDE_SCREEN
 }
