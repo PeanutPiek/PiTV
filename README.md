@@ -1,5 +1,6 @@
 # PiTV
 The PiTV Project is designed to integrate different Functions of a Smart TV on any Display.
+Everbody should be able to use the whole wide of "Television Entertainment", including not only real Televisions, either Internet TV as a Streaming Portal or something like this. But there are many people, who uses older TV Devices, without Network Connector or any SmartTV Systems. So why not easily extend your TV Device with a cheap Solution to tune a Display into a Smart Entertainment System.
 This Project Page is a Placeholder, in case of development of this Project. Stay tuned and review this Page frequently.
 
 
