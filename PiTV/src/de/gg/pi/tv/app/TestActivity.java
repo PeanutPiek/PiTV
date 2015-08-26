@@ -3,6 +3,8 @@
  */
 package de.gg.pi.tv.app;
 
+import java.awt.Dimension;
+
 import de.gg.pi.tv.TVActivity;
 
 /**
@@ -29,4 +31,6 @@ public class TestActivity extends TVActivity {
 		System.out.println("Test Activity closed!");
 	}
 
+	@Override
+	public void resize(Dimension size) {}
 }

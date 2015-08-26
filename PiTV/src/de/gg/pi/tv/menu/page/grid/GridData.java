@@ -13,7 +13,7 @@ import de.gg.pi.tv.menu.utils.Vector2;
  * @author PeanutPiek
  *
  */
-public class GridData<T extends MenuObject> {
+public class GridData<T extends MenuObject> extends MenuData<T> {
 	
 	
 	private T data;

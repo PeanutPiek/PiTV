@@ -60,8 +60,8 @@ public abstract class MenuGridBoard<T extends MenuObject> extends MenuBoard<T> {
 	
 	private int columnCount;
 	
-	
-	private ArrayList<GridData<T>> valueList = new ArrayList<GridData<T>>();
+//	
+//	private ArrayList<GridData<T>> valueList = new ArrayList<GridData<T>>();
 	
 	
 	private final JPanel gridMenu = new JPanel();
@@ -127,7 +127,7 @@ public abstract class MenuGridBoard<T extends MenuObject> extends MenuBoard<T> {
 	public void addValue(T val) {
 		int left = -1, top = -1;
 		GridData<T> gd = new GridData<T>(val, left, top);
-		valueList.add(gd);
+		dataList.add(gd);
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public abstract class MenuGridBoard<T extends MenuObject> extends MenuBoard<T> {
 	 */
 	public void fillGrid(int offset, int length, int rows, int cols) {
 		int i = 0;
-		int l = valueList.size();
+		int l = dataList.size();
 		if(l>offset&&offset>0) {
 			i = offset;
 		}
@@ -165,7 +165,7 @@ public abstract class MenuGridBoard<T extends MenuObject> extends MenuBoard<T> {
 			for(int j = 0; j < cols; ++j) {
 				if(j>=length&&length>0) break;
 				int ii = k*cols+j;
-				final GridData<T> a = valueList.get(ii + i);
+				final GridData<T> a = (GridData<T>) dataList.get(ii + i);
 				
 				ImageIcon img = null;
 				if(a.getIcon()!=null) {

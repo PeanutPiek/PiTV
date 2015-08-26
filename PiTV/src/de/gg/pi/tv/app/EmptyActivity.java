@@ -3,6 +3,8 @@
  */
 package de.gg.pi.tv.app;
 
+import java.awt.Dimension;
+
 import de.gg.pi.tv.ActivityType;
 import de.gg.pi.tv.TVActivity;
 
@@ -31,4 +33,6 @@ public class EmptyActivity extends TVActivity {
 		System.out.println("Empty Activity is closed!");
 	}
 
+	@Override
+	public void resize(Dimension size) {}
 }

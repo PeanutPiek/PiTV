@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.annotation.Documented;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -113,14 +114,14 @@ public class TVMain {
 		// Get default XML File Activity List.
 		File xmlFile = new File("res/config.xml");
 		// If the XML File does not exists, exit with Error.
-		if(!xmlFile.exists()) throw new IllegalAccessError("No Config File found!");
+		if(!xmlFile.exists()) throw new IllegalAccessError("No default Config File found!");
 		try {
 			JAXBContext jaxb = JAXBContext.newInstance(PiTVConfig.class);
 			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
-			// Retrieve Activity List from XML File.
-			PiTVConfig list = (PiTVConfig) jaxbUnmarshaller.unmarshal(xmlFile);
+			// Retrieve Config from XML File.
+			PiTVConfig config = (PiTVConfig) jaxbUnmarshaller.unmarshal(xmlFile);
 			// Inspect every Activity from Activity List.
-			for(Activity act : list.getActivities().getActivities()) {
+			for(Activity act : config.getActivityList().getActivities()) {
 				// Get Information about selected Activity.
 				String iconImagePath = act.getIconImagePath();
 				String className = act.getActivityClass();
@@ -145,8 +146,17 @@ public class TVMain {
 						}
 						if(clazz!=null) {
 							// Create a new Instance of the Activity Class.
-							// Therefor it is needed to got a default Constructor without any Arguments in the Activity Class.
-							a = (TVActivity) clazz.newInstance();
+							// Therefore it is needed to got a default Constructor without any Arguments in the Activity Class.
+							Constructor<?> con = clazz.getConstructor();
+							if(con!=null) {
+								con.setAccessible(true);
+								a = (TVActivity) clazz.newInstance();
+									
+							} else {
+								// no default Constructor found.
+								System.err.println("Activity " +clazz.getName() + " got no default Constructor!");
+							}
+							
 						}
 						if(a!=null) {
 							// Set IconImage from Activity Definition.
@@ -167,7 +177,7 @@ public class TVMain {
 					}
 				}
 			}
-			Color bg = list.getBackground();
+			Color bg = config.getBackground();
 			tv.setBackgroundColor(bg);
 		}catch(Exception ex) {
 			if(DEBUG) {

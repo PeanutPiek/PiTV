@@ -5,6 +5,7 @@ package de.gg.pi.tv.menu;
 
 import java.awt.Image;
 
+import de.gg.pi.tv.IActivity;
 import de.gg.pi.tv.TVActivity;
 import de.gg.pi.tv.menu.page.MenuObject;
 
@@ -15,14 +16,14 @@ import de.gg.pi.tv.menu.page.MenuObject;
 public class ActivityIcon extends MenuObject {
 
 	
-	private TVActivity activity;
+	private IActivity activity;
 	
 	
 	
 	
 	
 	
-	public ActivityIcon(TVActivity a) {
+	public ActivityIcon(IActivity a) {
 		activity = a;
 		
 		
@@ -51,7 +52,7 @@ public class ActivityIcon extends MenuObject {
 	 * 
 	 * @return
 	 */
-	public TVActivity getActivity() {
+	public IActivity getActivity() {
 		return activity;
 	}
 

@@ -113,7 +113,7 @@ public class PiTV implements Runnable {
 	/**
 	 * TVActivity List, with available Activities.
 	 */
-	private final ArrayList<TVActivity> activities = new ArrayList<TVActivity>();
+	private final ArrayList<IActivity> activities = new ArrayList<IActivity>();
 	
 	/**
 	 * IRController, to read IR Input from TV Controll Device.
@@ -179,15 +179,21 @@ public class PiTV implements Runnable {
 			@Override
 			protected void handleMenu(ActivityIcon obj, int state) {
 				// Get involved Activity.
-				TVActivity a = obj.getActivity();
-				// Visibillity of Screen Context.
+				IActivity a = obj.getActivity();
+				// Visibility of Screen Context.
 				boolean visible = true;
 				if(state==OPEN) {
 					// Activity is opened.
+					
+					// Hide PiTV Main Frame.
 					visible = false;
 				}
 				if(state==CLOSE) {
 					// Activity is closed.
+					
+					// Clear Default Activity.
+					DefaultActivity.setFocusedActivity(null);
+					// Show PiTV Main Frame.
 					visible = true;
 				}
 				// Show/Hide Screen Content.
@@ -389,7 +395,7 @@ public class PiTV implements Runnable {
 	 * @param activity
 	 * @return
 	 */
-	public boolean addActivity(TVActivity activity) {
+	public boolean addActivity(IActivity activity) {
 		if(!activities.contains(activity)) {
 			activities.add(activity);
 			((MenuGridBoard<ActivityIcon>)page).addValue(new ActivityIcon(activity));
@@ -406,7 +412,7 @@ public class PiTV implements Runnable {
 	 * 
 	 * @param activity
 	 */
-	public void removeActivity(TVActivity activity) {
+	public void removeActivity(IActivity activity) {
 		if(activities.contains(activity)) {
 			activities.remove(activity);
 			if(activities.size()<pageCount*elementsPerPage) {
@@ -430,6 +436,10 @@ public class PiTV implements Runnable {
 	public void run() {
 		while(activ) {
 //			((MenuGridBoard<ActivityIcon>) page).fillGrid(0, activities.size(), elementsPerPage);
+			IActivity def = DefaultActivity.getFocusedActivity();
+			if(def != null) {
+				def.resize(screen.getSize());
+			}
 			screen.repaint();
 			try {
 				Thread.sleep(RENDERING_INTERVAL);

@@ -1,5 +1,6 @@
 package de.gg.pi.tv;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 import de.gg.pi.Library;
 
@@ -19,7 +21,7 @@ import de.gg.pi.Library;
  * @author PeanutPiek
  *
  */
-public abstract class TVActivity {
+public abstract class TVActivity implements IActivity {
 	
 	
 	/**
@@ -42,6 +44,11 @@ public abstract class TVActivity {
 	 * Icon of the Activity.
 	 */
 	protected Image icon = null;
+	
+	/**
+	 * 
+	 */
+	protected JFrame screen;
 
 	
 	/**
@@ -56,7 +63,7 @@ public abstract class TVActivity {
 		if(!iconUrl.isEmpty())
 			setIcon(iconUrl);
 		
-		
+		initializeScreen();
 	}
 	
 	/**
@@ -76,6 +83,15 @@ public abstract class TVActivity {
 	 */
 	protected TVActivity(String name) {
 		this(name, "");
+	}
+	
+	
+	private void initializeScreen() {
+		screen = new JFrame(this.name);
+		screen.setUndecorated(true);
+		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		screen.setLayout(null);
+		
 	}
 	
 	
@@ -129,6 +145,7 @@ public abstract class TVActivity {
 		return name;
 	}
 	
+	
 	/**
 	 * This Method will called if the TVActivity is clicked.
 	 * Use this Method to run a sub Application.
@@ -140,6 +157,10 @@ public abstract class TVActivity {
 	 * Use this Method to close the sub Application and free all resources.
 	 */
 	public abstract void close();
+	
+	
+	public abstract void resize(Dimension size);
+	
 	
 	@Override
 	public String toString() {

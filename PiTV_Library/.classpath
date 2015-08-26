@@ -8,5 +8,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jlirc"/>
+	<classpathentry kind="lib" path="G:/Java/lib/SWT6M1/swt.jar"/>
+	<classpathentry kind="lib" path="G:/Java/lib/DJNativeSwing/DJNativeSwing.jar" sourcepath="G:/Java/lib/DJNativeSwing/src/DJNativeSwing"/>
+	<classpathentry kind="lib" path="G:/Java/lib/DJNativeSwing/DJNativeSwing-SWT.jar" sourcepath="G:/Java/lib/DJNativeSwing/src/DJNativeSwing-SWT"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

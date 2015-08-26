@@ -17,10 +17,14 @@ import de.gg.pi.TVMain;
 @XmlRootElement(name="PiTVConfig")
 public class PiTVConfig {
 
+	/**
+	 * 
+	 */
+	String background;
 	
-	String backgroundColor;
-	
-	
+	/**
+	 * 
+	 */
 	ActivityList activities;
 	
 	
@@ -36,23 +40,23 @@ public class PiTVConfig {
 		this.irConfig = irConfig;
 	}
 
-	public ActivityList getActivities() {
+	public ActivityList getActivityList() {
 		return activities;
 	}
 
 	@XmlElement(name="Activities")
-	public void setActivities(ActivityList activities) {
+	public void setActivityList(ActivityList activities) {
 		this.activities = activities;
 	}
 	
 	
-	public String getBackgroundColor() {
-		return backgroundColor;
+	public String getBackgroundData() {
+		return background;
 	}
 	
-	@XmlElement(name="backgroundcolor")
-	public void setBackgroundColor(String backgroundColor) {
-		this.backgroundColor = backgroundColor;
+	@XmlElement(name="bgdata")
+	public void setBackgroundData(String background) {
+		this.background = background;
 	}
 	
 	/**
@@ -61,7 +65,7 @@ public class PiTVConfig {
 	 */
 	public Color getBackground() {
 		Color c = null;
-		String cs = this.backgroundColor;
+		String cs = this.background;
 		try {
 			// Hex Color Code.
 			if(cs.startsWith("#")) {
