@@ -1,15 +1,13 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu;
+package de.gg.pi.tv;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import de.gg.pi.tv.menu.page.MenuObject;
-import de.gg.pi.tv.menu.page.grid.MenuData;
 
 /**
  * @author PeanutPiek
@@ -40,4 +38,6 @@ public abstract class MenuBoard<T extends MenuObject> extends JPanel {
 		super.paint(g);
 		
 	}
+	
+	
 }

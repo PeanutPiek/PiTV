@@ -6,8 +6,8 @@ package de.gg.pi.tv.menu;
 import java.awt.Image;
 
 import de.gg.pi.tv.IActivity;
+import de.gg.pi.tv.MenuObject;
 import de.gg.pi.tv.TVActivity;
-import de.gg.pi.tv.menu.page.MenuObject;
 
 /**
  * @author PeanutPiek

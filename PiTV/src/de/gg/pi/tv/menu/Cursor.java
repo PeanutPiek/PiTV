@@ -1,18 +1,20 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu.page;
+package de.gg.pi.tv.menu;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
+import de.gg.pi.tv.ICursor;
+
 /**
  * @author PeanutPiek
  *
  */
-public class Cursor extends JComponent {
+public class Cursor extends JComponent implements ICursor {
 	
 	
 	
@@ -53,7 +55,7 @@ public class Cursor extends JComponent {
 		
 	}
 	
-	
+	@Override
 	public void move(int x, int y) {
 		this.x = x; 
 		this.y = y;
@@ -64,8 +66,8 @@ public class Cursor extends JComponent {
 		this.visible = visible;
 	}
 
-	
-	public boolean getVisible() {
+	@Override
+	public boolean isVisible() {
 		return this.visible;
 	}
 	

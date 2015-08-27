@@ -8,8 +8,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jlirc"/>
-	<classpathentry kind="lib" path="G:/Java/lib/SWT6M1/swt.jar"/>
-	<classpathentry kind="lib" path="G:/Java/lib/DJNativeSwing/DJNativeSwing.jar" sourcepath="G:/Java/lib/DJNativeSwing/src/DJNativeSwing"/>
-	<classpathentry kind="lib" path="G:/Java/lib/DJNativeSwing/DJNativeSwing-SWT.jar" sourcepath="G:/Java/lib/DJNativeSwing/src/DJNativeSwing-SWT"/>
+	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-win-5.4.2.jar"/>
+	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-5.4.2.jar"/>
+	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-linux32-5.4.2.jar"/>
+	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-linux64-5.4.2.jar"/>
+	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-mac-5.4.2.jar"/>
+	<classpathentry kind="lib" path="src/licence.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

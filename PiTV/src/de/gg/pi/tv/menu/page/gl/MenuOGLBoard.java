@@ -6,8 +6,8 @@ package de.gg.pi.tv.menu.page.gl;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.gg.pi.tv.menu.MenuBoard;
-import de.gg.pi.tv.menu.page.MenuObject;
+import de.gg.pi.tv.MenuBoard;
+import de.gg.pi.tv.MenuObject;
 
 /**
  * @author PeanutPiek

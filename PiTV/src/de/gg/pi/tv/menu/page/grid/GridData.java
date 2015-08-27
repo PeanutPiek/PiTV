@@ -5,7 +5,8 @@ package de.gg.pi.tv.menu.page.grid;
 
 import java.awt.Image;
 
-import de.gg.pi.tv.menu.page.MenuObject;
+import de.gg.pi.tv.MenuData;
+import de.gg.pi.tv.MenuObject;
 import de.gg.pi.tv.menu.page.data.DataHandler;
 import de.gg.pi.tv.menu.utils.Vector2;
 

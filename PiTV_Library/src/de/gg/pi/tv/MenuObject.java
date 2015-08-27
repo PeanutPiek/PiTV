@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu.page;
+package de.gg.pi.tv;
 
 import java.awt.Image;
 

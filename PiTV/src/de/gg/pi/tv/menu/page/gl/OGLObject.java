@@ -3,7 +3,7 @@
  */
 package de.gg.pi.tv.menu.page.gl;
 
-import de.gg.pi.tv.menu.page.MenuObject;
+import de.gg.pi.tv.MenuObject;
 
 /**
  * @author PeanutPiek

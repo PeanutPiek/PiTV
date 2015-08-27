@@ -19,13 +19,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.gg.pi.TVMain;
+import de.gg.pi.tv.app.ActivityHandler;
 import de.gg.pi.tv.bind.Activity;
 import de.gg.pi.tv.ir.CodeListener;
 import de.gg.pi.tv.ir.IRController;
 import de.gg.pi.tv.ir.IRController.IRCode;
 import de.gg.pi.tv.menu.ActivityIcon;
 import de.gg.pi.tv.menu.ItemCursor;
-import de.gg.pi.tv.menu.page.Cursor;
 import de.gg.pi.tv.menu.page.grid.GridData;
 import de.gg.pi.tv.menu.page.grid.MenuGridBoard;
 
@@ -158,6 +158,11 @@ public class PiTV implements Runnable {
 		if(TVMain.DEBUG) {
 			screen_dimension = new Dimension(800, 600);
 		}
+		
+//		screen = new AWTScreen("PiTV", screen_dimension);
+		
+		
+		
 		screen = new JFrame("PiTV");
 		screen.setSize(screen_dimension.width, screen_dimension.height);
 		screen.setUndecorated(true);
@@ -184,7 +189,10 @@ public class PiTV implements Runnable {
 				boolean visible = true;
 				if(state==OPEN) {
 					// Activity is opened.
-					
+					IActivity def = DefaultActivity.getFocusedActivity();
+					if(def != null) {
+						def.resize(screen.getSize());
+					}
 					// Hide PiTV Main Frame.
 					visible = false;
 				}
@@ -270,6 +278,20 @@ public class PiTV implements Runnable {
 		btnPrev.addActionListener(prevPage());
 		screen.getContentPane().add(btnPrev, BorderLayout.WEST);
 		
+		
+		
+		DefaultActivity.getInstance().addHandler(new ActivityHandler() {
+
+			@Override
+			public void activityFocused(IActivity activity) {
+				// TODO Auto-generated method stub
+				Dimension s = screen.getSize();
+				activity.resize(s);
+			}
+			
+		});
+		
+		
 		if(TVMain.IR_ENABLED) {
 			ir = IRController.createNewController();
 			if(ir==null) {
@@ -285,6 +307,15 @@ public class PiTV implements Runnable {
 							break;
 						case MENU_PAGE_PREV:
 							prevPage();
+							break;
+						case MENU_NEXT:
+							// Move Cursor one to right
+							break;
+						case MENU_PREV:
+							// Move Cursor one to left
+							break;
+						case MENU_OK:
+							// Call selected Activity or handle Menu Action.
 							break;
 						default:
 							System.out.println("Unknown IRCode Received!");
@@ -436,10 +467,7 @@ public class PiTV implements Runnable {
 	public void run() {
 		while(activ) {
 //			((MenuGridBoard<ActivityIcon>) page).fillGrid(0, activities.size(), elementsPerPage);
-			IActivity def = DefaultActivity.getFocusedActivity();
-			if(def != null) {
-				def.resize(screen.getSize());
-			}
+			
 			screen.repaint();
 			try {
 				Thread.sleep(RENDERING_INTERVAL);

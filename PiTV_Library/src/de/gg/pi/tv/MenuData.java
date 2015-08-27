@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.gg.pi.tv.menu.page.grid;
+package de.gg.pi.tv;
 
 /**
  * @author PeanutPiek

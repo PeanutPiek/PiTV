@@ -45,7 +45,7 @@ public class TVMain {
 	/**
 	 * Debug State Identifier.
 	 */
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	
 	/**
 	 * Application Version.

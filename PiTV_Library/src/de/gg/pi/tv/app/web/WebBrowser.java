@@ -5,11 +5,12 @@ package de.gg.pi.tv.app.web;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import de.gg.pi.tv.Utils;
 
@@ -30,7 +31,16 @@ public class WebBrowser extends JPanel {
 	/**
 	 * 
 	 */
-	protected JWebBrowser browser;
+	protected Browser browser;
+	
+	
+	private BrowserView bView;
+	
+	
+	protected String pageTemplate;
+	
+	
+	private String preparedTemplate;
 	
 	/**
 	 * 
@@ -45,24 +55,16 @@ public class WebBrowser extends JPanel {
 	 * 
 	 */
 	private void initialize() {
-		browser = new JWebBrowser();
-		browser.setBarsVisible(false);
-		browser.setButtonBarVisible(false);
-		browser.setLocationBarVisible(false);
-		browser.setMenuBarVisible(false);
-		browser.setStatusBarVisible(false);
-		browser.setBackground(Color.BLACK);
-		browser.getNativeComponent().setBackground(Color.BLACK);
-		browser.setFocusable(false);
-		browser.setJavascriptEnabled(true);
-		
-		browser.setHTMLContent(getHTMLContext());
-		
+		browser = new Browser();
+		bView = new BrowserView(browser);
+
 		setBackground(Color.BLACK);
 		
 		setLayout(new BorderLayout());
 		
-		add(browser, BorderLayout.CENTER);
+		add(bView, BorderLayout.CENTER);
+		
+		browser.loadHTML(getHTMLContext());
 	}
 	
 	/**
@@ -91,10 +93,45 @@ public class WebBrowser extends JPanel {
 		try {
 			html = Utils.getToolkit().readFile(htmlFilePath);
 			
-			browser.setHTMLContent(html);
+			browser.loadHTML(html);
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
+	
+	public void loadContentTemplate(String template) {
+		pageTemplate = template;
+	}
+	
+	
+	public void loadContentTemplateByPath(String templatePath) {
+		String content = null;
+		try {
+			content = Utils.getToolkit().readFile(templatePath);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		loadContentTemplate(content);
+	}
+	
+	
+	public void prepareContentTemplate(HashMap<String, String> map) {
+		
+		if(pageTemplate!=null) {
+			if(!pageTemplate.isEmpty()) {
+				preparedTemplate = pageTemplate;
+				for(String key : map.keySet()) {
+					preparedTemplate = preparedTemplate.replace(key, map.get(key));
+				}
+			}
+		}
+		
+	}
+	
+	
+	public void buildContentTemplate() {
+		browser.loadHTML(preparedTemplate);
+	}
 }

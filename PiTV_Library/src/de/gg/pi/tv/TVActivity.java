@@ -159,7 +159,13 @@ public abstract class TVActivity implements IActivity {
 	public abstract void close();
 	
 	
-	public abstract void resize(Dimension size);
+	public void resize(Dimension size) {
+		if(screen!=null) {
+			screen.setSize(size);
+			screen.invalidate();
+			screen.validate();
+		}
+	}
 	
 	
 	@Override
