@@ -182,6 +182,18 @@ public class Utils {
 	}
 	
 	
+	public static boolean isTypeOf(Class<?> clazz, Class<?> superClass) {
+	    boolean isSubclassOf = false;
+	    if (!clazz.equals(superClass)) {
+	        clazz = clazz.getSuperclass();
+	        isSubclassOf = Utils.isTypeOf(clazz, superClass);
+	    } else {
+	        isSubclassOf = true;
+	    }
+	    return isSubclassOf;
+	}
+	
+	
 	public static void main(String[] args) {
 		
 	}

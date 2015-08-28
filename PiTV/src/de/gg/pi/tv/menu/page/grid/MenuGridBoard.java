@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 
 import de.gg.pi.tv.MenuBoard;
 import de.gg.pi.tv.MenuObject;
-import de.gg.pi.tv.menu.ItemCursor;
+import de.gg.pi.tv.menu.cursor.ItemCursor;
 import de.gg.pi.tv.menu.page.MenuButton;
 
 

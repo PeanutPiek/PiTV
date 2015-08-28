@@ -51,6 +51,9 @@ public abstract class TVActivity implements IActivity {
 	protected JFrame screen;
 
 	
+	private ActivityWrapper wrapperReference;
+	
+	
 	/**
 	 * 
 	 * @param name
@@ -170,7 +173,7 @@ public abstract class TVActivity implements IActivity {
 	
 	@Override
 	public String toString() {
-		return "TVActivity [" + name + "]";
+		return "TVActivity@" + id + " [" + name + "]";
 	}
 	
 	@Override
@@ -179,6 +182,10 @@ public abstract class TVActivity implements IActivity {
 			return (name.equals(((TVActivity) obj).getName()) && (id==((TVActivity)obj).getID()));
 		}
 		return super.equals(obj);
+	}
+
+	public void setWrapper(ActivityWrapper wrapper) {
+		wrapperReference = wrapper;
 	}
 
 }

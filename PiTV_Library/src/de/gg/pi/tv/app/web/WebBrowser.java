@@ -16,6 +16,10 @@ import de.gg.pi.tv.Utils;
 
 /**
  * 
+ * 
+ * This Class uses JxBrowser (http://www.teamdev.com/jxbrowser) for rendering web content.
+ * 
+ * 
  * @author PeanutPiek
  * @version 26.08.2015
  *

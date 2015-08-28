@@ -1,36 +1,27 @@
 package de.gg.pi.tv;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.gg.pi.TVMain;
 import de.gg.pi.tv.app.ActivityHandler;
-import de.gg.pi.tv.bind.Activity;
-import de.gg.pi.tv.ir.CodeListener;
 import de.gg.pi.tv.ir.IRController;
-import de.gg.pi.tv.ir.IRController.IRCode;
+import de.gg.pi.tv.menu.SwingScreen;
+import de.gg.pi.tv.menu.cursor.IRRemoteCursor;
+import de.gg.pi.tv.menu.cursor.ItemCursor;
 import de.gg.pi.tv.menu.ActivityIcon;
-import de.gg.pi.tv.menu.ItemCursor;
-import de.gg.pi.tv.menu.page.grid.GridData;
 import de.gg.pi.tv.menu.page.grid.MenuGridBoard;
+import de.gg.pi.tv.view.Screen;
+import de.gg.pi.tv.view.View;
 
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
 
 
 /**
@@ -63,7 +54,7 @@ public class PiTV implements Runnable {
 	/**
 	 * Full Screen Application Window.
 	 */
-	private JFrame screen;
+	private Screen screen;
 	
 	/**
 	 * Sub Window, which contains the Content of a Single Page of Application Icons.
@@ -159,184 +150,194 @@ public class PiTV implements Runnable {
 			screen_dimension = new Dimension(800, 600);
 		}
 		
-//		screen = new AWTScreen("PiTV", screen_dimension);
-		
-		
-		
-		screen = new JFrame("PiTV");
-		screen.setSize(screen_dimension.width, screen_dimension.height);
-		screen.setUndecorated(true);
-		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		screen.getContentPane().setBackground(DEFAULT_BACKGROUND_COLOR);
-		
-		aspect_ratio = screen.getWidth() / screen.getHeight();
-		
-		screen.getContentPane().setLayout(new BorderLayout());		
-		
-		final Dimension d = screen_dimension;
-		page = new MenuGridBoard<ActivityIcon>(rows, cols) {
+		// Initialize new View.
+		SwingView view = new GridView(rows, cols);
+		// Create Cursor.
+		ICursor cursor = null; 
+		if(TVMain.IR_ENABLED) {
+			cursor = new IRRemoteCursor();
+		} else {
+			cursor = new ItemCursor(Color.WHITE) {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void handleMenu(ActivityIcon obj, int state) {
-				// Get involved Activity.
-				IActivity a = obj.getActivity();
-				// Visibility of Screen Context.
-				boolean visible = true;
-				if(state==OPEN) {
-					// Activity is opened.
-					IActivity def = DefaultActivity.getFocusedActivity();
-					if(def != null) {
-						def.resize(screen.getSize());
-					}
-					// Hide PiTV Main Frame.
-					visible = false;
-				}
-				if(state==CLOSE) {
-					// Activity is closed.
+				@Override
+				public void paint(Graphics g, int x, int y, int w, int h) {
+					double p = 0.15;
+					double lw = w * p;
+					double lh = h * p;
 					
-					// Clear Default Activity.
-					DefaultActivity.setFocusedActivity(null);
-					// Show PiTV Main Frame.
-					visible = true;
+					Graphics2D g2 = (Graphics2D)g.create();
+
+					g2.setColor(mainColor);
+					// Paint left top Triangle.
+					g2.fillRect(0, 0, (int) lw, 5);
+					g2.fillRect(0, 0, 5, (int) lh);
+					// Paint right top Triangle.
+					g2.fillRect((int) (w - lw), 0, (int)lw, 5);
+					g2.fillRect(w - 5, 0, 5, (int) lh);
+					// Paint left bottom Triangle.
+					g2.fillRect(0, h - 5, (int) lw, 5);
+					g2.fillRect(0, (int) (h -lh), 5, (int) lh);
+					// Paint right bottom Triangle.
+					g2.fillRect((int) (w - lw), (int) (h - 5),(int) lw, 5);
+					g2.fillRect((int) (w - 5), (int) (h - lh), 5, (int) lh);
+					
+					g2.dispose();
 				}
-				// Show/Hide Screen Content.
-				screen.setVisible(visible);
-				
-
-			}
-		};
-		String footText = "PiTV [" + TVMain.VERSION + ((TVMain.DEBUG)?"/Debug":"") + "] IR_Enabled: " + TVMain.IR_ENABLED;
-		((MenuGridBoard<ActivityIcon>)page).setFooterText(footText);
-		ItemCursor cursor = new ItemCursor(Color.WHITE) {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void paint(Graphics g, int x, int y, int w, int h) {
-				double p = 0.15;
-				double lw = w * p;
-				double lh = h * p;
-				
-				Graphics2D g2 = (Graphics2D)g.create();
-
-				g2.setColor(mainColor);
-				// Paint left top Triangle.
-				g2.fillRect(0, 0, (int) lw, 5);
-				g2.fillRect(0, 0, 5, (int) lh);
-				// Paint right top Triangle.
-				g2.fillRect((int) (w - lw), 0, (int)lw, 5);
-				g2.fillRect(w - 5, 0, 5, (int) lh);
-				// Paint left bottom Triangle.
-				g2.fillRect(0, h - 5, (int) lw, 5);
-				g2.fillRect(0, (int) (h -lh), 5, (int) lh);
-				// Paint right bottom Triangle.
-				g2.fillRect((int) (w - lw), (int) (h - 5),(int) lw, 5);
-				g2.fillRect((int) (w - 5), (int) (h - lh), 5, (int) lh);
-				
-				g2.dispose();
-			}
-			
-		};
-		((MenuGridBoard<ActivityIcon>)page).setCursour(cursor);
-		
-		screen.getContentPane().add(page, BorderLayout.CENTER);
-		// right Button to go to next Page.
-		JButton btnNext = new JButton() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public boolean isVisible() {
-				// Show this Button only if a next Page is available.
-				if(hasNextPage()) {
-					return super.isVisible();
-				}
-				return false;
-			}
-		};
-		btnNext.addActionListener(nextPage());
-		
-		screen.getContentPane().add(btnNext, BorderLayout.EAST);
-		// left Button to go to previouse Page.
-		JButton btnPrev = new JButton() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public boolean isVisible() {
-				// Show this Button only if a previous Page is available.
-				if(hasPrevPage()) {
-					return super.isVisible();
-				}
-				return false;
 			};
-		};
-		btnPrev.addActionListener(prevPage());
-		screen.getContentPane().add(btnPrev, BorderLayout.WEST);
+		}
+		// Set View Cursor.
+		view.setCursor(cursor);
 		
+		// Create new Screen.
+		screen = new SwingScreen("PiTV", screen_dimension, view);		
 		
-		
+		// Default Activity Control.
 		DefaultActivity.getInstance().addHandler(new ActivityHandler() {
-
 			@Override
 			public void activityFocused(IActivity activity) {
 				// TODO Auto-generated method stub
-				Dimension s = screen.getSize();
+				Dimension s = new Dimension(screen.getWidth(), screen.getHeight());
 				activity.resize(s);
 			}
-			
 		});
 		
 		
-		if(TVMain.IR_ENABLED) {
-			ir = IRController.createNewController();
-			if(ir==null) {
-				System.err.println("No IRController created!");
-			} else {
-				ir.addCodeListener(new CodeListener() {
-					
-					@Override
-					public void codeReceived(IRCode code) {
-						switch(code) {
-						case MENU_PAGE_NEXT:
-							nextPage();
-							break;
-						case MENU_PAGE_PREV:
-							prevPage();
-							break;
-						case MENU_NEXT:
-							// Move Cursor one to right
-							break;
-						case MENU_PREV:
-							// Move Cursor one to left
-							break;
-						case MENU_OK:
-							// Call selected Activity or handle Menu Action.
-							break;
-						default:
-							System.out.println("Unknown IRCode Received!");
-							break;
-						}
-					}
-				});
-			}
-		}
+//		screen = new JFrame("PiTV");
+//		screen.setSize(screen_dimension.width, screen_dimension.height);
+//		screen.setUndecorated(true);
+//		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		screen.getContentPane().setBackground(DEFAULT_BACKGROUND_COLOR);
+//		
+//		aspect_ratio = screen.getWidth() / screen.getHeight();
+//		
+//		screen.getContentPane().setLayout(new BorderLayout());		
+		
+//		final Dimension d = screen_dimension;
+//		MenuBoard page = new MenuGridBoard<ActivityIcon>(rows, cols) {
+//
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			protected void handleMenu(ActivityIcon obj, int state) {
+//				// Get involved Activity.
+//				IActivity a = obj.getActivity();
+//				// Visibility of Screen Context.
+//				boolean visible = true;
+//				if(state==OPEN) {
+//					// Activity is opened.
+//					IActivity def = DefaultActivity.getFocusedActivity();
+//					if(def != null) {
+//						def.resize(new Dimension(screen.getWidth(), screen.getHeight()));
+//					}
+//					// Hide PiTV Main Frame.
+//					visible = false;
+//				}
+//				if(state==CLOSE) {
+//					// Activity is closed.
+//					
+//					// Clear Default Activity.
+//					DefaultActivity.setFocusedActivity(null);
+//					// Show PiTV Main Frame.
+//					visible = true;
+//				}
+//				// Show/Hide Screen Content.
+//				screen.setVisible(visible);
+//				
+//
+//			}
+//		};
+//		String footText = "PiTV [" + TVMain.VERSION + ((TVMain.DEBUG)?"/Debug":"") + "] IR_Enabled: " + TVMain.IR_ENABLED;
+//		((MenuGridBoard<ActivityIcon>)page).setFooterText(footText);
+		
+//		screen.setPage(page);
+		
+//		((MenuGridBoard<ActivityIcon>)page).setCursour(cursor);
+//		
+//		screen.getContentPane().add(page, BorderLayout.CENTER);
+//		// right Button to go to next Page.
+//		JButton btnNext = new JButton() {
+//			private static final long serialVersionUID = 1L;
+//			@Override
+//			public boolean isVisible() {
+//				// Show this Button only if a next Page is available.
+//				if(hasNextPage()) {
+//					return super.isVisible();
+//				}
+//				return false;
+//			}
+//		};
+//		btnNext.addActionListener(nextPage());
+//		
+//		screen.getContentPane().add(btnNext, BorderLayout.EAST);
+//		// left Button to go to previouse Page.
+//		JButton btnPrev = new JButton() {
+//			private static final long serialVersionUID = 1L;
+//			@Override
+//			public boolean isVisible() {
+//				// Show this Button only if a previous Page is available.
+//				if(hasPrevPage()) {
+//					return super.isVisible();
+//				}
+//				return false;
+//			};
+//		};
+//		btnPrev.addActionListener(prevPage());
+//		screen.getContentPane().add(btnPrev, BorderLayout.WEST);
+		
+		
+//		if(TVMain.IR_ENABLED) {
+//			ir = IRController.createNewController();
+//			if(ir==null) {
+//				System.err.println("No IRController created!");
+//			} else {
+//				ir.addCodeListener(new CodeListener() {
+//					
+//					@Override
+//					public void codeReceived(IRCode code) {
+//						switch(code) {
+//						case MENU_PAGE_NEXT:
+//							nextPage();
+//							break;
+//						case MENU_PAGE_PREV:
+//							prevPage();
+//							break;
+//						case MENU_NEXT:
+//							// Move Cursor one to right
+//							break;
+//						case MENU_PREV:
+//							// Move Cursor one to left
+//							break;
+//						case MENU_OK:
+//							// Call selected Activity or handle Menu Action.
+//							break;
+//						default:
+//							System.out.println("Unknown IRCode Received!");
+//							break;
+//						}
+//					}
+//				});
+//			}
+//		}
 	}
 	
 	
-	public void start() {
+	public boolean start() {
 		activ = true;
 		screen.setVisible(activ);
 		screen.repaint();
 		
-		fillGrid();
-		
 		renderingThread = new Thread(this);
 		renderingThread.start();
+		
+		return true;
 	}
 	
 	
@@ -418,7 +419,7 @@ public class PiTV implements Runnable {
 	 * @return Aspect Ratio of the Screen Device.
 	 */
 	public float getAspectRatio() {
-		return aspect_ratio;
+		return screen.getAspectRatio();
 	}
 	
 	/**
@@ -429,11 +430,10 @@ public class PiTV implements Runnable {
 	public boolean addActivity(IActivity activity) {
 		if(!activities.contains(activity)) {
 			activities.add(activity);
-			((MenuGridBoard<ActivityIcon>)page).addValue(new ActivityIcon(activity));
+			screen.getView().addElement(new ActivityIcon(activity));
 			if(activities.size()>pageCount*elementsPerPage) {
 				pageCount++;
 			}
-//			fillGrid(elementsPerPage*pageNum, elementsPerPage);
 			return true;
 		}
 		return false;
@@ -456,7 +456,7 @@ public class PiTV implements Runnable {
 	
 	public void setBackgroundColor(Color background) {
 		this.backgroundColor = background;
-		screen.getContentPane().setBackground(backgroundColor);
+//		screen.getContentPane().setBackground(backgroundColor);
 		page.setBackground(backgroundColor);
 		page.invalidate();
 		page.validate();

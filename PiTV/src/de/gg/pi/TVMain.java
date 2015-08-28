@@ -11,10 +11,14 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.annotation.Documented;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -22,6 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import de.gg.pi.tv.ActivityWrapper;
 import de.gg.pi.tv.PiTV;
 import de.gg.pi.tv.TVActivity;
 import de.gg.pi.tv.Utils;
@@ -41,6 +46,11 @@ import de.gg.pi.tv.bind.PiTVConfig;
  *
  */
 public class TVMain {
+	
+	
+	
+	public static final String DEFAULT_CONFIG_FILE = "tv/basic/config/config.xml";
+	
 
 	/**
 	 * Debug State Identifier.
@@ -73,134 +83,175 @@ public class TVMain {
 	 */
 	private PiTV tv;
 	
+	/**
+	 * 
+	 */
+	private PiTVConfig config;
 	
 	/**
 	 * Constructor of TVMain Class.
 	 */
 	private TVMain() {
-		
-		tv = PiTV.newInstance();
-		
-		
-		
+		this(DEFAULT_CONFIG_FILE);
+	}
+	
+	
+	/**
+	 * 
+	 * @param configFilePath
+	 */
+	private TVMain(String configFilePath) {
+		System.out.println("PiTV started...");
+		try {
+			List<ActivityWrapper> list = null;
+			// try to load configuration.
+			System.out.println("Try to load PiTV Configuration...");
+			config = loadConfig(configFilePath);
+			if(config!=null) {
+				System.out.println("Done.");
+				System.out.println("Load Activity List...");
+				list = loadActivityList();
+				if(list!=null) {
+					System.out.println("Done.");
+				} else {
+					System.out.println("Failed.");
+				}
+			} else {
+				System.out.println("Failed.");
+			}
+			// Create new PiTV Instance.
+			System.out.println("Try to get PiTV Instance...");
+			tv = PiTV.newInstance();
+			System.out.println("Done.");
+			// Add loaded Activities into PiTV.
+			System.out.println("Load Activities into PiTV...");
+			for(ActivityWrapper a : list) {
+				System.out.println("Add " + a);
+				TVActivity act = a.getActivity();
+				if(act!=null)
+					tv.addActivity(act);
+				else System.out.println("Unable to add " + act);
+			}
+			System.out.println("Done.");
+			// Run PiTV.
+			System.out.println("Start PiTV Application...");
+			boolean started = tv.start();
+			if(started) {
+				System.out.println("Done.");
+			} else {
+				throw new Exception("Unable to start PiTV!");
+			}
+			// Initialized.
+			System.out.println("PiTV started and running well.");
+		}catch(Exception ex) {
+			System.out.println("Failed.");
+			ex.printStackTrace();
+		}
 	}
 	
 	/**
 	 * 
+	 * @param configFile
+	 * @return
+	 * @throws IllegalAccessError
+	 * @throws JAXBException
 	 */
-	private void setupAndRun() {
-		try {
-			System.out.print("Loading Configuration... ");
-			loadConfig();
-			System.out.println("\nDone.");
-			tv.start();
-		} catch(Exception ex) {
-			System.out.println("Failed!");
-			if(DEBUG) {
-				ex.printStackTrace();
-			} else {
-				System.err.println(ex.getMessage());
-			}
-		}
+	private PiTVConfig loadConfig(String configFile) throws IllegalAccessError, JAXBException {
+		PiTVConfig config = null;
+		File configXmlFile = new File(TVMain.class.getResource(configFile).getFile());
+		// Check if Config File exists.
+		if(!configXmlFile.exists()) throw new IllegalAccessError("No default Config File found!");
+		// Load Config File via JAXB.
+		JAXBContext jaxb = JAXBContext.newInstance(PiTVConfig.class);
+		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+		config = (PiTVConfig) jaxbUnmarshaller.unmarshal(configXmlFile);
+		// return loaded Config.
+		return config;
 	}
 	
 	/**
-	 * Reads used Activity List from predefined XML File.
-	 *  
-	 * @throws IllegalAccessError	Activity List is needed for Functionallity of this Application,
-	 * 								so there is an Error thrown if the Activity List File is not found.
+	 * 
+	 * @return
 	 */
-	private void loadConfig() throws IllegalAccessError {
-		// Get default XML File Activity List.
-		File xmlFile = new File("res/config.xml");
-		// If the XML File does not exists, exit with Error.
-		if(!xmlFile.exists()) throw new IllegalAccessError("No default Config File found!");
+	private List<ActivityWrapper> loadActivityList() {
+		String className = null;
+		String exec = null;
+		String iconImagePath = null;
+		List<ActivityWrapper> list = new ArrayList<ActivityWrapper>();
 		try {
-			JAXBContext jaxb = JAXBContext.newInstance(PiTVConfig.class);
-			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
-			// Retrieve Config from XML File.
-			PiTVConfig config = (PiTVConfig) jaxbUnmarshaller.unmarshal(xmlFile);
-			// Inspect every Activity from Activity List.
+		// For each Activity in configuration Activity List.
 			for(Activity act : config.getActivityList().getActivities()) {
-				// Get Information about selected Activity.
-				String iconImagePath = act.getIconImagePath();
-				String className = act.getActivityClass();
-				String exec = act.getExecutable();
-				try {
-					// Dummy Activity.
-					TVActivity a = null;
-					if(!className.isEmpty()) {
-						ClassLoader cl;
-						// If ActivityClass is defined, search for the needed Class.
-						Class<?> clazz = null;
-						if(exec.isEmpty()) {
-							clazz = Class.forName(className);
-						} else {
-							File f = new File("act/" + exec + ".jar");
-							if(f.exists()) {
-								URL url = f.toURI().toURL();
-								URL[] urls = new URL[] {url};
-								cl = new URLClassLoader(urls);
-								clazz = cl.loadClass(className);
-							}
+				// Get Information about current Activity.
+				iconImagePath = act.getIconImagePath();
+				exec = act.getExecutable();
+				className = act.getActivityClass();
+				// Dummy Activity.
+				ActivityWrapper a = null;
+				if(!className.isEmpty()) {
+					ClassLoader cl;
+					// If ActivityClass is defined, search for the needed Class.
+					Class<?> clazz = null;
+					if(exec.isEmpty()) {
+						clazz = Class.forName(className);
+					} else {
+						File f = new File("act/" + exec + ".jar");
+						if(f.exists()) {
+							URL url = f.toURI().toURL();
+							URL[] urls = new URL[] {url};
+							cl = new URLClassLoader(urls);
+							clazz = cl.loadClass(className);
 						}
-						if(clazz!=null) {
-							// Create a new Instance of the Activity Class.
-							// Therefore it is needed to got a default Constructor without any Arguments in the Activity Class.
-							Constructor<?> con = clazz.getConstructor();
-							if(con!=null) {
-								con.setAccessible(true);
-								a = (TVActivity) clazz.newInstance();
-									
-							} else {
-								// no default Constructor found.
-								System.err.println("Activity " +clazz.getName() + " got no default Constructor!");
-							}
-							
-						}
+					}
+					if(clazz!=null) {
+						// Create a new Instance of the Activity Class.
+						// Therefore it is needed to got a default Constructor without any Arguments in the Activity Class.
+						System.out.println("Build ActivityWrapper for " + clazz.getName());
+						a = createActivityWrapper(clazz);
 						if(a!=null) {
 							// Set IconImage from Activity Definition.
-							a.setIcon(iconImagePath);
-						}
+							a.setActivityIcon(iconImagePath);
+							
+							list.add(a);
+							if(DEBUG)
+								System.out.print("\n" + a + " succesfully loaded.");
+						} else System.err.println("Unresolved Problem, during Building Activity.");
 					}
-					// If there is an Activity yet, add this to the Activity List.
-					if(a!=null) {
-						tv.addActivity(a);
-						if(DEBUG)
-							System.out.print("\n" + a + " succesfully loaded.");
-					}
-				} catch(Exception e) {
-					if(DEBUG&&!(e instanceof java.lang.ClassNotFoundException)) {
-						e.printStackTrace();
-					} else {
-						System.out.print("\nUnable to load TVActivity " + className + ".\n");
-					}
-				}
+				}				
 			}
-			Color bg = config.getBackground();
-			tv.setBackgroundColor(bg);
-		}catch(Exception ex) {
-			if(DEBUG) {
-				ex.printStackTrace();
+			return list;
+		} catch(Exception e) {
+			if(!(e instanceof java.lang.ClassNotFoundException)) {
+				e.printStackTrace();
 			} else {
-				System.err.println(ex.getMessage());
+				System.out.print("\nUnable to load TVActivity " + className + ".\n");
 			}
 		}
+		return null;
 	}
 	
-	
-	
-	
-	
+	/**
+	 * 
+	 * @param source
+	 * @return
+	 * @throws Exception
+	 */
+	private ActivityWrapper createActivityWrapper(Class<?> source) throws Exception {
+		ActivityWrapper aw = new ActivityWrapper(source);
+		if(aw.isValidActivity()) {
+			return aw;
+		}
+		return null;
+	}
+		
 	/**
 	 * Runs the Installation of the PiTV, which creates all
-	 * nesessary Folders and extract all default Files in to
+	 * necessary Folders and extract all default Files in to
 	 * the Installation Directory.
 	 * @return	state of Installation is done without Errors.
 	 * @throws IOException	Throws an IOException, in case of any Error, creating
 	 * 						a Folder or File.
 	 */
-	private boolean installPiTV() throws IOException {
+	private static boolean installPiTV() throws IOException {
 		
 		int chk = 0;
 		int err = 0;
@@ -239,11 +290,18 @@ public class TVMain {
 	}
 	
 	
-	private void reinstallPiTV() {
+	private static boolean reinstallPiTV() {
+		// TODO 
 		
+		return false;
 	}
 	
 	
+	private static boolean isInstalled() {
+		// TODO
+		
+		return true;
+	}
 	
 	
 	/**
@@ -253,7 +311,7 @@ public class TVMain {
 	 */
 	public static void main(String[] args) {
 		boolean forceInstall = false,
-				forceReinstall = false,
+				alreadyInstalled = false,
 				printHelp = false;
 		String  logPath = DEFAULT_LOG,
 				errPath = DEFAULT_ERROR;
@@ -262,10 +320,6 @@ public class TVMain {
 			
 			if(a.equals("-i")||a.equals("--install")) {
 				forceInstall = true;
-			}
-			else
-			if(a.equals("-r")||a.equals("--reinstall")) {
-				forceReinstall = true;
 			}
 			else
 			if(a.equals("-h")||a.equals("--help")) {
@@ -279,13 +333,21 @@ public class TVMain {
 				System.out.println(getHelpText());
 			}
 			else {
-				// Main Instance to hold the Application Context.
-				TVMain main = new TVMain();		
-				if(forceInstall) {
-					main.installPiTV();
+				alreadyInstalled = isInstalled();
+				if(forceInstall||!alreadyInstalled) {
+					if(installPiTV()) {
+						System.out.println("PiTV successful installed.");
+					}
+				} else if(forceInstall) {
+					if(reinstallPiTV()) {
+						System.out.println("PiTV successful reinstalled.");
+					}
 				}
 				
-				main.setupAndRun();
+				// Main Instance to hold the Application Context.
+				TVMain main = new TVMain();		
+				
+				
 				
 				// Change Default Output Stream.
 				System.setOut(Utils.createPrintStream(TVMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/" + logPath));
@@ -310,7 +372,6 @@ public class TVMain {
 		help += "Arg	ArgAlt		Definition\n";
 		help += "--------------------------------------\n";
 		help += "-i	--install	: Start the Installation of PiTV.\n";
-		help += "-r	--reinstall	: Start a Reinstallation. Maybe nesessary for Update.\n";
 		help += "-h	--help		: Prints this Help Context.\n";
 		help += "\n";
 		// Return Help Context.

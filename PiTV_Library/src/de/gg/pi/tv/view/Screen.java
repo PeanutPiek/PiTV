@@ -5,6 +5,7 @@ package de.gg.pi.tv.view;
 
 import de.gg.pi.tv.ICursor;
 import de.gg.pi.tv.MenuBoard;
+import de.gg.pi.tv.MenuObject;
 
 /**
  * @author PeanutPiek
@@ -15,25 +16,27 @@ public interface Screen {
 	
 	
 	public float getAspectRatio();
-	
-	
-	public void setPage(MenuBoard board);
+
 	
 	
 	public void setCursor(ICursor cursor);
 	
 	
-	public boolean hasNextPage();
+	public int getWidth();
 	
 	
-	public boolean hasPrevPage();
+	public int getHeight();
 	
 	
-	public void moveNextPage();
+	public void setVisible(boolean visible);
 	
 	
-	public void movePrevPage();
+	public void repaint();
+
+	
+	public View getView();
 	
 	
-	public void movePage(int index);
+	public void setView(View view);
+
 }

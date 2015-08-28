@@ -18,7 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import de.gg.pi.TVMain;
-import de.gg.pi.tv.menu.ItemCursor;
+import de.gg.pi.tv.menu.cursor.ItemCursor;
 import de.gg.pi.tv.menu.page.data.DataHandler;
 
 /**
