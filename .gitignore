@@ -2,3 +2,5 @@
 # Block any Acitivies from Git
 *Activity/
 
+PiTV/bin/*.err
+PiTV/bin/*.log
