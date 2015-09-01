@@ -19,6 +19,9 @@ import de.gg.pi.tv.Utils;
  * 
  * This Class uses JxBrowser (http://www.teamdev.com/jxbrowser) for rendering web content.
  * 
+ * Disclaimer: JxBrowser library is not part of PiTV, but it is a proprietary software. The use of 
+ * JxBrowser is governed by JxBrowser Product Licence Agreement. If you would like to use JxBrowser
+ * in your development, please contact TeamDev team: teamdev.com/jxbrowser
  * 
  * @author PeanutPiek
  * @version 26.08.2015
@@ -122,7 +125,6 @@ public class WebBrowser extends JPanel {
 	
 	
 	public void prepareContentTemplate(HashMap<String, String> map) {
-		
 		if(pageTemplate!=null) {
 			if(!pageTemplate.isEmpty()) {
 				preparedTemplate = pageTemplate;

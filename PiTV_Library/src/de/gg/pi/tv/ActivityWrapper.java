@@ -43,13 +43,14 @@ public class ActivityWrapper {
 	 * @throws Exception
 	 */
 	private static TVActivity newActivityInstance(Class<?> sourceClass, ActivityWrapper wrapper) throws Exception {
+		System.out.println("Initialize new Instance of " + sourceClass + " on default Constrcutor.");
 		Constructor<?> con = sourceClass.getConstructor();
 		if(con!=null) {
 			con.setAccessible(true);
 			TVActivity a = null;
 			a = (TVActivity) con.newInstance();
 			a.setWrapper(wrapper);
-			Thread.sleep(300);
+			Thread.sleep(200);
 			return a;
 		} else {
 			// no default Constructor found.

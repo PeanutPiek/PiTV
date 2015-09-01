@@ -50,9 +50,10 @@ public abstract class TVActivity implements IActivity {
 	 */
 	protected JFrame screen;
 
-	
+	/**
+	 * 
+	 */
 	private ActivityWrapper wrapperReference;
-	
 	
 	/**
 	 * 
@@ -184,8 +185,16 @@ public abstract class TVActivity implements IActivity {
 		return super.equals(obj);
 	}
 
+	
 	public void setWrapper(ActivityWrapper wrapper) {
 		wrapperReference = wrapper;
 	}
 
+	
+	public ActivityWrapper getWrapper() {
+		if(wrapperReference==null) {
+			System.err.println("ActivityWrapperReference by " + this + " is null!");
+		}
+		return wrapperReference;
+	}
 }
