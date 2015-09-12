@@ -125,7 +125,7 @@ public class PiTV implements Runnable {
 	 */
 	public static PiTV getInstance() {
 		if(_instance==null) {
-			return PiTV.newInstance(null);
+			return PiTV.newInstance();
 		}
 		return _instance;
 	}
@@ -134,10 +134,10 @@ public class PiTV implements Runnable {
 	 * 
 	 * @return
 	 */
-	public static PiTV newInstance(ScreenEngine engine) {
+	public static PiTV newInstance() {
 		if(_instance==null) {
 			System.out.print("Initializing new PiTV... ");
-			_instance = new PiTV(engine);
+			_instance = new PiTV();
 			System.out.println("Done.");
 		}
 		return _instance;
@@ -146,85 +146,88 @@ public class PiTV implements Runnable {
 	/**
 	 * 
 	 */
-	private PiTV(ScreenEngine engine) {
+	private PiTV() {
 		
 		Dimension screen_dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		if(TVMain.DEBUG) {
 			screen_dimension = new Dimension(800, 600);
 		}
 		
-		View view;
-		// Initialize new View.
-		switch(engine) {
-		case Swing:
-			view = new GridView(rows, cols);
-			break;
-		case SWT:
-			view = (View) new SWTView();
-			break;
-		case OGL:
-			view = new OGLView();
-			break;
-		default:
-			System.err.println("Unresolved Screen Engine was choosen!");
-		}
-		
-		if(view!=null) {
-			// Create Cursor.
-			ICursor cursor = null; 
-			if(TVMain.IR_ENABLED) {
-				cursor = new IRRemoteCursor();
-			} else {
-				cursor = new ItemCursor(Color.WHITE) {
-	
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-	
-					@Override
-					public void paint(Graphics g, int x, int y, int w, int h) {
-						double p = 0.15;
-						double lw = w * p;
-						double lh = h * p;
-						
-						Graphics2D g2 = (Graphics2D)g.create();
-	
-						g2.setColor(mainColor);
-						// Paint left top Triangle.
-						g2.fillRect(0, 0, (int) lw, 5);
-						g2.fillRect(0, 0, 5, (int) lh);
-						// Paint right top Triangle.
-						g2.fillRect((int) (w - lw), 0, (int)lw, 5);
-						g2.fillRect(w - 5, 0, 5, (int) lh);
-						// Paint left bottom Triangle.
-						g2.fillRect(0, h - 5, (int) lw, 5);
-						g2.fillRect(0, (int) (h -lh), 5, (int) lh);
-						// Paint right bottom Triangle.
-						g2.fillRect((int) (w - lw), (int) (h - 5),(int) lw, 5);
-						g2.fillRect((int) (w - 5), (int) (h - lh), 5, (int) lh);
-						
-						g2.dispose();
-					}
-				};
-			}
-			// Set View Cursor.
-			view.setCursor(cursor);
-			// Create new Screen.			
+		View view = null;
+		ScreenEngine engine = TVMain.getScreenEngine();
+		if(engine!=null) {
+			// Initialize new View.
 			switch(engine) {
 			case Swing:
-				screen = new SwingScreen("PiTV", screen_dimension, (SwingView)view);
+				view = new GridView(rows, cols);
 				break;
 			case SWT:
-				screen = new SWTScreen("PiTV", screen_dimension.width, screen_dimension.height);
-				screen.getRenderingThread().start();
+				view = (View) new SWTView();
 				break;
 			case OGL:
-				screen = new OGLScreen("PiTV", screen_dimension, (OGLView)view);
-				screen.getRenderingThread().start();
+				view = new OGLView();
 				break;
 			default:
 				System.err.println("Unresolved Screen Engine was choosen!");
+			}
+			
+			if(view!=null) {
+				// Create Cursor.
+				ICursor cursor = null; 
+				if(TVMain.IR_ENABLED) {
+					cursor = new IRRemoteCursor();
+				} else {
+					cursor = new ItemCursor(Color.WHITE) {
+		
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+		
+						@Override
+						public void paint(Graphics g, int x, int y, int w, int h) {
+							double p = 0.15;
+							double lw = w * p;
+							double lh = h * p;
+							
+							Graphics2D g2 = (Graphics2D)g.create();
+		
+							g2.setColor(mainColor);
+							// Paint left top Triangle.
+							g2.fillRect(0, 0, (int) lw, 5);
+							g2.fillRect(0, 0, 5, (int) lh);
+							// Paint right top Triangle.
+							g2.fillRect((int) (w - lw), 0, (int)lw, 5);
+							g2.fillRect(w - 5, 0, 5, (int) lh);
+							// Paint left bottom Triangle.
+							g2.fillRect(0, h - 5, (int) lw, 5);
+							g2.fillRect(0, (int) (h -lh), 5, (int) lh);
+							// Paint right bottom Triangle.
+							g2.fillRect((int) (w - lw), (int) (h - 5),(int) lw, 5);
+							g2.fillRect((int) (w - 5), (int) (h - lh), 5, (int) lh);
+							
+							g2.dispose();
+						}
+					};
+				}
+				// Set View Cursor.
+				view.setCursor(cursor);
+				// Create new Screen.			
+				switch(engine) {
+				case Swing:
+					screen = new SwingScreen("PiTV", screen_dimension, (SwingView)view);
+					break;
+				case SWT:
+					screen = new SWTScreen("PiTV", screen_dimension.width, screen_dimension.height);
+					screen.getRenderingThread().start();
+					break;
+				case OGL:
+					screen = new OGLScreen("PiTV", screen_dimension, (OGLView)view);
+					screen.getRenderingThread().start();
+					break;
+				default:
+					System.err.println("Unresolved Screen Engine was choosen!");
+				}
 			}
 		}
 

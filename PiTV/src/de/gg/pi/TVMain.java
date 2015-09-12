@@ -32,6 +32,7 @@ import de.gg.pi.tv.TVActivity;
 import de.gg.pi.tv.Utils;
 import de.gg.pi.tv.bind.Activity;
 import de.gg.pi.tv.bind.PiTVConfig;
+import de.gg.pi.tv.bind.ScreenInfo.ScreenEngine;
 
 /**
  * TVMain Class declares the Entry Point for the PiTV Application, which runs a Smart TV like Application
@@ -78,6 +79,9 @@ public class TVMain {
 	public static final String DEFAULT_ERROR = "pitv_default.err";
 	
 	
+	private static ScreenEngine engine;
+	
+	
 	/**
 	 * PiTV Object, which declares the interactable Application Context.
 	 */
@@ -108,6 +112,7 @@ public class TVMain {
 			System.out.println("Try to load PiTV Configuration...");
 			config = loadConfig(configFilePath);
 			if(config!=null) {
+				engine = config.getScreenInfo().getScreenEngine();
 				System.out.println("Done.");
 				System.out.println("Load Activity List...");
 				list = loadActivityList();
@@ -380,6 +385,11 @@ public class TVMain {
 		help += "\n";
 		// Return Help Context.
 		return help;
+	}
+
+
+	public static ScreenEngine getScreenEngine() {
+		return engine;
 	}
 
 }
