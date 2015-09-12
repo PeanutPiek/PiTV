@@ -68,6 +68,8 @@ public class WebBrowser extends JPanel implements IBrowser<Browser> {
 		browser = new Browser();
 		bView = new BrowserView(browser);
 
+		bView.setBackground(Color.BLACK);
+		
 		setBackground(Color.BLACK);
 		
 		setLayout(new BorderLayout());

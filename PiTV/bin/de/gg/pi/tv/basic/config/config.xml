@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PiTVConfig>
-	<backgroundcolor>#3c2c5c</backgroundcolor>
+	<ScreenRendering>
+		<engine>Swing</engine>
+		<bgdata>#3c2c5c</bgdata>
+	</ScreenRendering>
 	<IRControl type="in" gpio="23" />
 	<IRControl type="out" gpio="22" />
 	<Activities>

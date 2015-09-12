@@ -209,7 +209,11 @@ public class TVMain {
 						a = createActivityWrapper(clazz);
 						if(a!=null) {
 							// Set IconImage from Activity Definition.
-							a.setActivityIcon(iconImagePath);
+							if(iconImagePath!=null) {
+								if(!iconImagePath.isEmpty()) {
+									a.setActivityIcon(iconImagePath);
+								}
+							}
 							
 							list.add(a);
 							if(DEBUG)

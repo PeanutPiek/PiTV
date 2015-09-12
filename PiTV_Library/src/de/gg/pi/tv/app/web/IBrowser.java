@@ -4,6 +4,8 @@
 package de.gg.pi.tv.app.web;
 
 /**
+ * Web Browser Interface, which 
+ * 
  * @author PeanutPiek
  *
  */

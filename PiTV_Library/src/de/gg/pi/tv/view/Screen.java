@@ -38,5 +38,8 @@ public interface Screen {
 	
 	
 	public void setView(View view);
+	
+	
+	public Thread getRenderingThread();
 
 }

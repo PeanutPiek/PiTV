@@ -13,6 +13,6 @@
 	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-linux32-5.4.2.jar"/>
 	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-linux64-5.4.2.jar"/>
 	<classpathentry kind="lib" path="G:/Java/lib/JXBrowser/lib/jxbrowser-mac-5.4.2.jar"/>
-	<classpathentry kind="lib" path="src/licence.jar"/>
+	<classpathentry kind="lib" path="src/development.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -19,6 +19,12 @@ public abstract class SwingView extends JPanel implements View {
 	
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	protected List<ViewMenuHandler> handlers = new ArrayList<ViewMenuHandler>();
 	
 	
