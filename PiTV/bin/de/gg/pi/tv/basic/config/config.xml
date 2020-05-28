@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PiTVConfig>
+	<!-- Screen Configuration -->
 	<ScreenRendering>
-		<engine>Swing</engine>
+		<!-- Available Engines are Swing, SWT and OGL -->
+		<engine>OGL</engine>
+		<!-- Background Color available formats are hex, rgb and string -->
 		<bgdata>#3c2c5c</bgdata>
 	</ScreenRendering>
+	<!-- GPIO Configuration -->
 	<IRControl type="in" gpio="23" />
 	<IRControl type="out" gpio="22" />
+	<!-- All Activities in the following list will be loaded into PiTV -->
+	<!-- Activities will be loaded in the order which is listed below from left top to right bottom -->
 	<Activities>
 		<Activity name="ClassTest">
 			<IconImagePath>empty-icon.png</IconImagePath>

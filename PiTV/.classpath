@@ -5,10 +5,11 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/PiTV_Library"/>
 	<classpathentry kind="lib" path="ext"/>
 	<classpathentry kind="lib" path="G:/Java/lib/SWT6M1/swt.jar"/>
-	<classpathentry kind="lib" path="G:/Java/lib/lwjgl-2.9.0/jar/lwjgl.jar">
+	<classpathentry kind="lib" path="G:/Java/lib/lwjgl-2.9.0/jar/lwjgl.jar" sourcepath="C:/Users/PeanutPiek/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="G:/Java/lib/lwjgl-2.9.0/native/windows"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/ggGalaxyEngine"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

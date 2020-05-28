@@ -14,13 +14,16 @@ import javax.swing.JPanel;
 import de.gg.pi.TVMain;
 import de.gg.pi.tv.app.ActivityHandler;
 import de.gg.pi.tv.bind.ScreenInfo.ScreenEngine;
+import de.gg.pi.tv.graphics.OGLScreen;
+import de.gg.pi.tv.graphics.OGLView;
+import de.gg.pi.tv.graphics.SWTScreen;
+import de.gg.pi.tv.graphics.SWTView;
+import de.gg.pi.tv.graphics.SwingScreen;
+import de.gg.pi.tv.graphics.SwingView;
 import de.gg.pi.tv.ir.IRController;
-import de.gg.pi.tv.menu.SwingScreen;
 import de.gg.pi.tv.menu.cursor.IRRemoteCursor;
 import de.gg.pi.tv.menu.cursor.ItemCursor;
 import de.gg.pi.tv.menu.ActivityIcon;
-import de.gg.pi.tv.menu.OGLScreen;
-import de.gg.pi.tv.menu.SWTScreen;
 import de.gg.pi.tv.menu.page.grid.MenuGridBoard;
 import de.gg.pi.tv.view.Screen;
 import de.gg.pi.tv.view.View;
@@ -135,18 +138,23 @@ public class PiTV implements Runnable {
 	 * @return
 	 */
 	public static PiTV newInstance() {
-		if(_instance==null) {
-			System.out.print("Initializing new PiTV... ");
-			_instance = new PiTV();
-			System.out.println("Done.");
+		try {
+			if(_instance==null) {
+				System.out.print("Initializing new PiTV... ");
+				_instance = new PiTV();
+				System.out.println("Done.");
+			}
+			return _instance;
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
-		return _instance;
+		return null;
 	}
 	
 	/**
 	 * 
 	 */
-	private PiTV() {
+	private PiTV() throws Exception {
 		
 		Dimension screen_dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		if(TVMain.DEBUG) {
@@ -223,7 +231,6 @@ public class PiTV implements Runnable {
 					break;
 				case OGL:
 					screen = new OGLScreen("PiTV", screen_dimension, (OGLView)view);
-					screen.getRenderingThread().start();
 					break;
 				default:
 					System.err.println("Unresolved Screen Engine was choosen!");
@@ -466,12 +473,14 @@ public class PiTV implements Runnable {
 	 */
 	public boolean addActivity(IActivity activity) {
 		if(!activities.contains(activity)) {
-			activities.add(activity);
-			screen.getView().addElement(new ActivityIcon(activity));
-			if(activities.size()>pageCount*elementsPerPage) {
-				pageCount++;
+			if(screen.getView()!=null) {
+				activities.add(activity);
+				screen.getView().addElement(new ActivityIcon(activity));
+				if(activities.size()>pageCount*elementsPerPage) {
+					pageCount++;
+				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}

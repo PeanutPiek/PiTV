@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import de.gg.pi.tv.graphics.SwingView;
 import de.gg.pi.tv.menu.page.MenuButton;
 import de.gg.pi.tv.menu.page.grid.GridData;
 

@@ -48,10 +48,10 @@ import de.gg.pi.tv.bind.ScreenInfo.ScreenEngine;
  */
 public class TVMain {
 	
-	
-	
+	/**
+	 * 
+	 */
 	public static final String DEFAULT_CONFIG_FILE = "tv/basic/config/config.xml";
-	
 
 	/**
 	 * Debug State Identifier.
